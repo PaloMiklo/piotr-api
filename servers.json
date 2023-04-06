@@ -1,0 +1,15 @@
+{
+    "Servers": {
+      "1": {
+        "Name": "piotr",
+        "Group": "Servers",
+        "Host": "piotr",
+        "Port": 5432,
+        "MaintenanceDB": "postgres",
+        "Username": "postgres",
+        "SSLMode": "prefer",
+        "Comment": ""
+      }
+    }
+  }
+  
