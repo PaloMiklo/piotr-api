@@ -8,6 +8,8 @@ DROP TABLE IF EXISTS public.order_table CASCADE;
 
 DROP TABLE IF EXISTS public.address CASCADE;
 
+DROP TABLE IF EXISTS public.image_table CASCADE;
+
 DROP TABLE IF EXISTS public.customer CASCADE;
 
 DROP TABLE IF EXISTS public.product CASCADE;
@@ -18,14 +20,14 @@ DROP TABLE IF EXISTS public.payed_option CASCADE;
 
 -- CREATE TABLES
 CREATE TABLE public.payed_option(
-  id SERIAL PRIMARY KEY,
+  code VARCHAR(25) PRIMARY KEY,
   name VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE public.payed_option_item(
-  id SERIAL PRIMARY KEY,
+  code VARCHAR(25) PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
-  payed_option INTEGER NOT NULL REFERENCES payed_option(id),
+  payed_option VARCHAR(25) NOT NULL REFERENCES payed_option(code),
   price NUMERIC
 );
 
@@ -60,17 +62,17 @@ CREATE TABLE public.address (
 CREATE TABLE public.order_table (
   id SERIAL PRIMARY KEY,
   customer_id INTEGER NOT NULL REFERENCES customer(id),
-  delivery_option_id INTEGER NOT NULL REFERENCES payed_option_item(id),
-  billing_option_id INTEGER NOT NULL REFERENCES payed_option_item(id),
+  delivery_option_item_code VARCHAR(25) NOT NULL REFERENCES payed_option_item(code),
+  billing_option_item_code VARCHAR(25) NOT NULL REFERENCES payed_option_item(code),
   created_fe TIMESTAMP NOT NULL DEFAULT NOW(),
   comment TEXT,
-  shipping_address INTEGER REFERENCES address(id),
-  billing_address INTEGER REFERENCES address(id)
+  shipping_address INTEGER NOT NULL REFERENCES address(id),
+  billing_address INTEGER NOT NULL REFERENCES address(id)
 );
 
 CREATE TABLE public.cart (
   id SERIAL PRIMARY KEY,
-  delivery_option_id INTEGER NOT NULL REFERENCES payed_option_item(id),
+  delivery_option_item_code VARCHAR(25) NOT NULL REFERENCES payed_option_item(code),
   delivery_price NUMERIC(10, 2) NOT NULL,
   free_shipping BOOLEAN NOT NULL,
   item_count INTEGER NOT NULL,
@@ -91,7 +93,7 @@ CREATE TABLE public.cart_line (
 ALTER TABLE
   public.payed_option_item
 ADD
-  CONSTRAINT fk_payed_option FOREIGN KEY (payed_option) REFERENCES public.payed_option(id);
+  CONSTRAINT fk_payed_option FOREIGN KEY (payed_option) REFERENCES public.payed_option(code);
 
 ALTER TABLE
   public.product
@@ -106,12 +108,12 @@ ADD
 ALTER TABLE
   public.order_table
 ADD
-  CONSTRAINT fk_order_delivery_option FOREIGN KEY (delivery_option_id) REFERENCES public.payed_option_item(id);
+  CONSTRAINT fk_order_delivery_option FOREIGN KEY (delivery_option_item_code) REFERENCES public.payed_option_item(code);
 
 ALTER TABLE
   public.order_table
 ADD
-  CONSTRAINT fk_order_billing_option FOREIGN KEY (billing_option_id) REFERENCES public.payed_option_item(id);
+  CONSTRAINT fk_order_billing_option FOREIGN KEY (billing_option_item_code) REFERENCES public.payed_option_item(code);
 
 ALTER TABLE
   public.order_table
@@ -136,7 +138,7 @@ ADD
 ALTER TABLE
   public.cart
 ADD
-  CONSTRAINT fk_cart_delivery_option FOREIGN KEY (delivery_option_id) REFERENCES public.payed_option_item(id);
+  CONSTRAINT fk_cart_delivery_option FOREIGN KEY (delivery_option_item_code) REFERENCES public.payed_option_item(code);
 
 ALTER TABLE
   public.cart
@@ -150,34 +152,49 @@ ADD
 
 -- INSERT MOCK DATA
 INSERT INTO
-  public.payed_option (name)
+  public.payed_option (code, name)
 VALUES
-  ('Standard');
+  ('STANDARD', 'Standard');
 
 INSERT INTO
-  public.payed_option (name)
+  public.payed_option (code, name)
 VALUES
-  ('Express');
+  ('EXPRESS', 'Express');
 
 INSERT INTO
-  public.payed_option (name)
+  public.payed_option (code, name)
 VALUES
-  ('Premium');
+  ('PREMIUM', 'Premium');
 
 INSERT INTO
-  public.payed_option_item (name, payed_option, price)
+  public.payed_option_item (code, name, payed_option, price)
 VALUES
-  ('Ground Shipping', 1, 5.99);
+  (
+    'GROUND_SHOPPING',
+    'Ground Shipping',
+    'STANDARD',
+    5.99
+  );
 
 INSERT INTO
-  public.payed_option_item (name, payed_option, price)
+  public.payed_option_item (code, name, payed_option, price)
 VALUES
-  ('2-Day Shipping', 2, 15.99);
+  (
+    '2_DAY_SHIPPING',
+    '2-Day Shipping',
+    'EXPRESS',
+    15.99
+  );
 
 INSERT INTO
-  public.payed_option_item (name, payed_option, price)
+  public.payed_option_item (code, name, payed_option, price)
 VALUES
-  ('Overnight Shipping', 3, 29.99);
+  (
+    'OVERNIGHT_SHIPPING',
+    'Overnight Shipping',
+    'PREMIUM',
+    29.99
+  );
 
 INSERT INTO
   image_table (image)
@@ -6889,29 +6906,36 @@ VALUES
 INSERT INTO
   public.order_table (
     customer_id,
-    delivery_option_id,
-    billing_option_id,
+    delivery_option_item_code,
+    billing_option_item_code,
     comment,
     shipping_address,
     billing_address
   )
 VALUES
-  (1, 1, 2, 'Please deliver to front porch', 1, 2);
+  (
+    1,
+    'GROUND_SHOPPING',
+    'OVERNIGHT_SHIPPING',
+    'Please deliver to front porch',
+    1,
+    2
+  );
 
 INSERT INTO
   public.order_table (
     customer_id,
-    delivery_option_id,
-    billing_option_id,
+    delivery_option_item_code,
+    billing_option_item_code,
     shipping_address,
     billing_address
   )
 VALUES
-  (2, 3, 3, 2, 2);
+  (2, 'OVERNIGHT_SHIPPING', '2_DAY_SHIPPING', 2, 2);
 
 INSERT INTO
   public.cart (
-    delivery_option_id,
+    delivery_option_item_code,
     delivery_price,
     free_shipping,
     item_count,
@@ -6919,11 +6943,11 @@ INSERT INTO
     customer_id
   )
 VALUES
-  (1, 5.99, FALSE, 2, 39.98, 1);
+  ('GROUND_SHOPPING', 5.99, FALSE, 2, 39.98, 1);
 
 INSERT INTO
   public.cart (
-    delivery_option_id,
+    delivery_option_item_code,
     delivery_price,
     free_shipping,
     item_count,
@@ -6931,7 +6955,7 @@ INSERT INTO
     customer_id
   )
 VALUES
-  (2, 15.99, FALSE, 1, 59.98, 2);
+  ('OVERNIGHT_SHIPPING', 15.99, FALSE, 1, 59.98, 2);
 
 INSERT INTO
   public.cart_line (product_id, amount, line_total, cart)

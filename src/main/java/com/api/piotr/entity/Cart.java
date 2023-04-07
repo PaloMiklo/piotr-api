@@ -1,7 +1,6 @@
 package com.api.piotr.entity;
 
 import java.math.BigDecimal;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,7 +23,7 @@ public class Cart {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "delivery_option_id")
+    @JoinColumn(name = "delivery_option_item_code")
     private PayedOptionItem deliveryOption;
 
     @Column(name = "delivery_price", nullable = false)

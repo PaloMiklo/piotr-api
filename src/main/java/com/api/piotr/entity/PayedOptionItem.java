@@ -1,7 +1,6 @@
 package com.api.piotr.entity;
 
 import java.math.BigDecimal;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,14 +20,14 @@ public class PayedOptionItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String code;
 
     @Column(nullable = false)
     private String name;
 
     @ManyToOne
     @JoinColumn(name = "payed_option")
-    private PayedOptionItem payedOption;
+    private PayedOption payedOption;
 
     @Column
     private BigDecimal price;
