@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Builder;
 import lombok.Data;
@@ -48,4 +49,7 @@ public class OrderTable {
     @ManyToOne
     @JoinColumn(name = "billing_address", nullable = false)
     private Address billingAddress;
+
+    @OneToOne(mappedBy = "orderTable")
+    private Cart cart;
 }

@@ -28,7 +28,7 @@ CREATE TABLE public.payed_option_item(
   code VARCHAR(25) PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   payed_option VARCHAR(25) NOT NULL REFERENCES payed_option(code),
-  price NUMERIC
+  price NUMERIC NOT NULL
 );
 
 CREATE TABLE public.image_table(id SERIAL PRIMARY KEY, image BYTEA);
@@ -38,9 +38,9 @@ CREATE TABLE public.product (
   name VARCHAR(255) NOT NULL,
   price NUMERIC(10, 2) NOT NULL,
   description TEXT,
-  quantity INTEGER,
-  image INTEGER REFERENCES image_table(id),
-  valid BOOLEAN DEFAULT FALSE
+  quantity INTEGER NOT NULL,
+  image INTEGER NOT NULL REFERENCES image_table(id),
+  valid BOOLEAN DEFAULT FALSE NOT NULL
 );
 
 CREATE TABLE public.customer (
@@ -52,11 +52,11 @@ CREATE TABLE public.customer (
 
 CREATE TABLE public.address (
   id SERIAL PRIMARY KEY,
-  street VARCHAR(255),
-  house_number VARCHAR(255),
-  zip_code VARCHAR(255),
-  city VARCHAR(255),
-  country VARCHAR(255)
+  street VARCHAR(255) NOT NULL,
+  house_number VARCHAR(255) NOT NULL,
+  zip_code VARCHAR(255) NOT NULL,
+  city VARCHAR(255) NOT NULL,
+  country VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE public.order_table (
@@ -78,7 +78,7 @@ CREATE TABLE public.cart (
   item_count INTEGER NOT NULL,
   cart_price NUMERIC(10, 2) NOT NULL,
   customer_id INTEGER NOT NULL REFERENCES customer(id),
-  order_id INTEGER REFERENCES order_table(id)
+  order_id INTEGER NOT NULL REFERENCES order_table(id)
 );
 
 CREATE TABLE public.cart_line (
@@ -6851,35 +6851,45 @@ CzDiAoaGjCTHMi8VNXen7qNgTjEZ0f1UKPAelR6Bl1xoUKDN6FCjRoUKFCKPxSTfKh+6FCkuUUml
   );
 
 INSERT INTO
-  public.product (name, price, description, quantity, valid)
+  public.product (name, price, description, quantity, image, valid)
 VALUES
   (
     'T-Shirt',
     19.99,
     'Comfortable cotton t-shirt in black',
     50,
+    1,
     TRUE
   );
 
 INSERT INTO
-  public.product (name, price, description, quantity, valid)
+  public.product (
+    name,
+    price,
+    description,
+    quantity,
+    image,
+    valid
+  )
 VALUES
   (
     'Sweatshirt',
     39.99,
     'Warm fleece sweatshirt in gray',
     30,
+    2,
     TRUE
   );
 
 INSERT INTO
-  public.product (name, price, description, quantity, valid)
+  public.product (name, price, description, quantity, image, valid)
 VALUES
   (
     'Sneakers',
     89.99,
     'Sporty sneakers with good grip',
     20,
+    3,
     TRUE
   );
 
@@ -6940,10 +6950,11 @@ INSERT INTO
     free_shipping,
     item_count,
     cart_price,
-    customer_id
+    customer_id,
+    order_id
   )
 VALUES
-  ('GROUND_SHOPPING', 5.99, FALSE, 2, 39.98, 1);
+  ('GROUND_SHOPPING', 5.99, FALSE, 2, 39.98, 1, 1);
 
 INSERT INTO
   public.cart (
@@ -6952,10 +6963,19 @@ INSERT INTO
     free_shipping,
     item_count,
     cart_price,
-    customer_id
+    customer_id,
+    order_id
   )
 VALUES
-  ('OVERNIGHT_SHIPPING', 15.99, FALSE, 1, 59.98, 2);
+  (
+    'OVERNIGHT_SHIPPING',
+    15.99,
+    FALSE,
+    1,
+    59.98,
+    2,
+    2
+  );
 
 INSERT INTO
   public.cart_line (product_id, amount, line_total, cart)
