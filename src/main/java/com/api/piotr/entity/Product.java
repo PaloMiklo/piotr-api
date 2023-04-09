@@ -38,7 +38,7 @@ public class Product {
     private Integer quantity;
 
     @ManyToOne
-    @JoinColumn(name = "image")
+    @JoinColumn(name = "image", nullable = true)
     private ImageTable image;
 
     @Column

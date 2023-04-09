@@ -25,15 +25,15 @@ public class OrderTable {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
     @ManyToOne
-    @JoinColumn(name = "delivery_option_item_code")
+    @JoinColumn(name = "delivery_option_item_code", nullable = false)
     private PayedOptionItem deliveryOption;
 
     @ManyToOne
-    @JoinColumn(name = "billing_option_item_code")
+    @JoinColumn(name = "billing_option_item_code", nullable = false)
     private PayedOptionItem billingOption;
 
     @Column(name = "created_fe", nullable = false)

@@ -39,7 +39,7 @@ CREATE TABLE public.product (
   price NUMERIC(10, 2) NOT NULL,
   description TEXT,
   quantity INTEGER NOT NULL,
-  image INTEGER NOT NULL REFERENCES image_table(id),
+  image INTEGER REFERENCES image_table(id),
   valid BOOLEAN DEFAULT FALSE NOT NULL
 );
 
@@ -72,12 +72,9 @@ CREATE TABLE public.order_table (
 
 CREATE TABLE public.cart (
   id SERIAL PRIMARY KEY,
-  delivery_option_item_code VARCHAR(25) NOT NULL REFERENCES payed_option_item(code),
-  delivery_price NUMERIC(10, 2) NOT NULL,
   free_shipping BOOLEAN NOT NULL,
   item_count INTEGER NOT NULL,
   cart_price NUMERIC(10, 2) NOT NULL,
-  customer_id INTEGER NOT NULL REFERENCES customer(id),
   order_id INTEGER NOT NULL REFERENCES order_table(id)
 );
 
@@ -134,16 +131,6 @@ ALTER TABLE
   public.cart_line
 ADD
   CONSTRAINT fk_cart_line_cart FOREIGN KEY (cart) REFERENCES public.cart(id);
-
-ALTER TABLE
-  public.cart
-ADD
-  CONSTRAINT fk_cart_delivery_option FOREIGN KEY (delivery_option_item_code) REFERENCES public.payed_option_item(code);
-
-ALTER TABLE
-  public.cart
-ADD
-  CONSTRAINT fk_cart_customer FOREIGN KEY (customer_id) REFERENCES public.customer(id);
 
 ALTER TABLE
   public.cart
@@ -6945,37 +6932,23 @@ VALUES
 
 INSERT INTO
   public.cart (
-    delivery_option_item_code,
-    delivery_price,
     free_shipping,
     item_count,
     cart_price,
-    customer_id,
     order_id
   )
 VALUES
-  ('GROUND_SHOPPING', 5.99, FALSE, 2, 39.98, 1, 1);
+  (FALSE, 2, 39.98, 1);
 
 INSERT INTO
   public.cart (
-    delivery_option_item_code,
-    delivery_price,
     free_shipping,
     item_count,
     cart_price,
-    customer_id,
     order_id
   )
 VALUES
-  (
-    'OVERNIGHT_SHIPPING',
-    15.99,
-    FALSE,
-    1,
-    59.98,
-    2,
-    2
-  );
+  (FALSE, 1, 59.98, 2);
 
 INSERT INTO
   public.cart_line (product_id, amount, line_total, cart)

@@ -30,7 +30,7 @@ public class ProductService {
 
     public ProductDetDto getProductById(Long id) {
         Optional<ProductDetDto> productDetail = productRepository.findProductById(id);
-        return productDetail.orElseThrow(() -> new ResourceNotFoundException("product", String.valueOf(id)));
+        return productDetail.orElseThrow(() -> new ResourceNotFoundException("Product", String.valueOf(id)));
     }
 
     public ProductDetDto createProduct(ProductNewDto product, MultipartFile image) {

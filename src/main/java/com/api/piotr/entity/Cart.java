@@ -10,7 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -27,13 +26,6 @@ public class Cart {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "delivery_option_item_code", nullable = false)
-    private PayedOptionItem deliveryOption;
-
-    @Column(name = "delivery_price", nullable = false)
-    private BigDecimal deliveryPrice;
-
     @Column(name = "free_shipping", nullable = false)
     private Boolean freeShipping;
 
@@ -42,10 +34,6 @@ public class Cart {
 
     @Column(name = "cart_price", nullable = false)
     private BigDecimal cartPrice;
-
-    @ManyToOne
-    @JoinColumn(name = "customer_id", nullable = false)
-    private Customer customer;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id", referencedColumnName = "id", nullable = false)

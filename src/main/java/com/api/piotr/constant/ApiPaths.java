@@ -7,9 +7,10 @@ public interface ApiPaths {
 
     public static final String LIST = "/list";
     public static final String CREATE = "";
-    public static final String DETAIL = "{id}";
+    public static final String DETAIL = "/{id}";
 
     public static String ORDER_LIST = LIST;
+    public static String ORDER_DETAIL = DETAIL;
     public static String ORDER_CREATE = CREATE;
 
     public static String PRODUCT_LIST = LIST;
