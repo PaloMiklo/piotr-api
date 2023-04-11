@@ -7,11 +7,11 @@ import com.api.piotr.entity.Customer;
 import org.springframework.lang.Nullable;
 
 public record OrderNewDto(
-                Customer customer,
-                String deliveryOptionItemCode,
-                String billingOptionItemCode,
-                LocalDateTime created,
-                @Nullable String comment,
-                Address shippingAddress,
-                Address billingAddress) {
+        Customer customer,
+        String deliveryOptionItemCode,
+        String billingOptionItemCode,
+        LocalDateTime created,
+        @Nullable String comment,
+        Address shippingAddress,
+        Address billingAddress) {
 }

@@ -1,7 +1,6 @@
 package com.api.piotr.repository;
 
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,7 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.api.piotr.dto.CartLineDetDto;
 import com.api.piotr.dto.OrderDetLightDto;
 import com.api.piotr.dto.OrderRowDto;
 import com.api.piotr.entity.OrderTable;
@@ -20,73 +18,56 @@ public interface OrderRepository extends JpaRepository<OrderTable, Long> {
 
     @Query("""
             SELECT new com.api.piotr.dto.OrderDetLightDto(
-                o.id,
+                ord.id,
                 new com.api.piotr.dto.CustomerDetDto(
-                    o.customer.id, o.customer.firstName, o.customer.lastName, o.customer.email
+                    ord.customer.id,
+                    ord.customer.firstName,
+                    ord.customer.lastName,
+                    ord.customer.email
                 ),
                 new com.api.piotr.dto.PayedOptionItemDetDto(
-                    o.deliveryOption.code,
-                    o.deliveryOption.name,
-                    po1.code,
-                    o.deliveryOption.price
+                    ord.deliveryOption.code,
+                    ord.deliveryOption.name,
+                    shippingOpt.code,
+                    ord.deliveryOption.price
                 ),
                 new com.api.piotr.dto.PayedOptionItemDetDto(
-                    o.billingOption.code,
-                    o.billingOption.name,
-                    po2.code,
-                    o.billingOption.price
+                    ord.billingOption.code,
+                    ord.billingOption.name,
+                    billingOpt.code,
+                    ord.billingOption.price
                 ),
-                o.created,
-                o.comment,
+                ord.created,
+                ord.comment,
                 new com.api.piotr.dto.AddressDetDto(
-                    o.shippingAddress.id,
-                    o.shippingAddress.street,
-                    o.shippingAddress.houseNumber,
-                    o.shippingAddress.zipCode,
-                    o.shippingAddress.city,
-                    o.shippingAddress.country
+                    ord.shippingAddress.id,
+                    ord.shippingAddress.street,
+                    ord.shippingAddress.houseNumber,
+                    ord.shippingAddress.zipCode,
+                    ord.shippingAddress.city,
+                    ord.shippingAddress.country
                 ),
                 new com.api.piotr.dto.AddressDetDto(
-                    o.billingAddress.id,
-                    o.billingAddress.street,
-                    o.billingAddress.houseNumber,
-                    o.billingAddress.zipCode,
-                    o.billingAddress.city,
-                    o.billingAddress.country
+                    ord.billingAddress.id,
+                    ord.billingAddress.street,
+                    ord.billingAddress.houseNumber,
+                    ord.billingAddress.zipCode,
+                    ord.billingAddress.city,
+                    ord.billingAddress.country
                 ),
                 new com.api.piotr.dto.CartDetLightDto(
-                    o.cart.id,
-                    o.cart.freeShipping,
-                    o.cart.itemCount,
-                    o.cart.cartPrice
+                    ord.cart.id,
+                    ord.cart.freeShipping,
+                    ord.cart.itemCount,
+                    ord.cart.cartPrice
                 )
             )
-            FROM OrderTable o
+            FROM OrderTable ord
             JOIN PayedOptionItem poi1 ON o.deliveryOption.code = poi1.code
-            JOIN PayedOption po1 ON po1.code = poi1.payedOption.code
+            JOIN PayedOption shippingOpt ON po1.code = poi1.payedOption.code
             JOIN PayedOptionItem poi2 ON o.billingOption.code = poi2.code
-            JOIN PayedOption po2 ON po2.code = poi2.payedOption.code
+            JOIN PayedOption billingOpt ON po2.code = poi2.payedOption.code
             WHERE o.id = :id
             """)
     Optional<OrderDetLightDto> findOrderById(@Param("id") Long id);
-
-    @Query("""
-            SELECT new com.api.piotr.dto.CartLineDetDto(
-                cl.id,
-                new com.api.piotr.dto.ProductDetDto(
-                    cl.product.id,
-                    cl.product.name,
-                    cl.product.price,
-                    cl.product.description,
-                    cl.product.quantity,
-                    cl.product.valid
-                ),
-                cl.amount,
-                cl.lineTotal,
-                cl.cart.id
-                )
-            FROM CartLine cl
-            WHERE cl.cart.id = :id
-            """)
-    Optional<Set<CartLineDetDto>> findCartLinesByCartId(@Param("id") Long id);
 }
