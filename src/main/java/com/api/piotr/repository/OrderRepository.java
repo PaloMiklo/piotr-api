@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.api.piotr.dto.OrderDetLightDto;
+import com.api.piotr.dto.OrderDetDto;
 import com.api.piotr.dto.OrderRowDto;
 import com.api.piotr.entity.OrderTable;
 
@@ -17,57 +17,61 @@ public interface OrderRepository extends JpaRepository<OrderTable, Long> {
     Page<OrderRowDto> findAllOrders(Pageable pageable);
 
     @Query("""
-            SELECT new com.api.piotr.dto.OrderDetLightDto(
+            SELECT new com.api.piotr.dto.OrderDetDto(
                 ord.id,
                 new com.api.piotr.dto.CustomerDetDto(
-                    ord.customer.id,
-                    ord.customer.firstName,
-                    ord.customer.lastName,
-                    ord.customer.email
+                    cust.id,
+                    cust.firstName,
+                    cust.lastName,
+                    cust.email
                 ),
                 new com.api.piotr.dto.PayedOptionItemDetDto(
-                    ord.deliveryOption.code,
-                    ord.deliveryOption.name,
-                    shippingOpt.code,
-                    ord.deliveryOption.price
+                    delOptItem.code,
+                    delOptItem.name,
+                    delOpt.code,
+                    delOptItem.price
                 ),
                 new com.api.piotr.dto.PayedOptionItemDetDto(
-                    ord.billingOption.code,
-                    ord.billingOption.name,
-                    billingOpt.code,
-                    ord.billingOption.price
+                    billOptItem.code,
+                    billOptItem.name,
+                    billOpt.code,
+                    billOptItem.price
                 ),
                 ord.created,
                 ord.comment,
                 new com.api.piotr.dto.AddressDetDto(
-                    ord.shippingAddress.id,
-                    ord.shippingAddress.street,
-                    ord.shippingAddress.houseNumber,
-                    ord.shippingAddress.zipCode,
-                    ord.shippingAddress.city,
-                    ord.shippingAddress.country
+                    shipAddr.id,
+                    shipAddr.street,
+                    shipAddr.houseNumber,
+                    shipAddr.zipCode,
+                    shipAddr.city,
+                    shipAddr.country
                 ),
                 new com.api.piotr.dto.AddressDetDto(
-                    ord.billingAddress.id,
-                    ord.billingAddress.street,
-                    ord.billingAddress.houseNumber,
-                    ord.billingAddress.zipCode,
-                    ord.billingAddress.city,
-                    ord.billingAddress.country
+                    billAddr.id,
+                    billAddr.street,
+                    billAddr.houseNumber,
+                    billAddr.zipCode,
+                    billAddr.city,
+                    billAddr.country
                 ),
-                new com.api.piotr.dto.CartDetLightDto(
-                    ord.cart.id,
-                    ord.cart.freeShipping,
-                    ord.cart.itemCount,
-                    ord.cart.cartPrice
+                new com.api.piotr.dto.CartDetDto(
+                    crt.id,
+                    crt.freeShipping,
+                    crt.itemCount,
+                    crt.cartPrice
                 )
             )
             FROM OrderTable ord
-            JOIN PayedOptionItem poi1 ON o.deliveryOption.code = poi1.code
-            JOIN PayedOption shippingOpt ON po1.code = poi1.payedOption.code
-            JOIN PayedOptionItem poi2 ON o.billingOption.code = poi2.code
-            JOIN PayedOption billingOpt ON po2.code = poi2.payedOption.code
-            WHERE o.id = :id
+            JOIN PayedOptionItem delOptItem ON delOptItem.code = ord.deliveryOption.code
+            JOIN PayedOptionItem billOptItem ON billOptItem.code = ord.billingOption.code
+            JOIN PayedOption delOpt ON delOpt.code = delOptItem.payedOption
+            JOIN PayedOption billOpt ON billOpt.code = billOptItem.payedOption
+            JOIN Customer cust ON cust.id = ord.customer.id
+            JOIN Cart crt ON crt.orderTable.id = ord.id
+            JOIN Address shipAddr ON shipAddr.id = ord.shippingAddress.id
+            JOIN Address billAddr ON billAddr.id = ord.billingAddress.id
+            WHERE ord.id = :id
             """)
-    Optional<OrderDetLightDto> findOrderById(@Param("id") Long id);
+    Optional<OrderDetDto> findOrderById(@Param("id") Long id);
 }

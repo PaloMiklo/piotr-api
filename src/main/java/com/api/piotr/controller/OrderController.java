@@ -20,8 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.api.piotr.dto.OrderDetFullDto;
-import com.api.piotr.dto.OrderDetLightDto;
+import com.api.piotr.dto.OrderDetDto;
 import com.api.piotr.dto.OrderNewDto;
 import com.api.piotr.dto.OrderRowDto;
 import com.api.piotr.service.OrderService;
@@ -39,14 +38,14 @@ public class OrderController {
     }
 
     @GetMapping(ORDER_DETAIL)
-    public ResponseEntity<OrderDetFullDto> getOrderById(@PathVariable Long id) {
-        OrderDetFullDto order = orderService.getFullOrderById(id);
+    public ResponseEntity<OrderDetDto> getOrderById(@PathVariable Long id) {
+        OrderDetDto order = orderService.getOrderById(id);
         return ResponseEntity.ok(order);
     }
 
     @PostMapping(path = ORDER_CREATE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<OrderDetLightDto> create(@RequestBody OrderNewDto orderDto) {
-        OrderDetLightDto order = orderService.createOrder(orderDto);
+    public ResponseEntity<OrderDetDto> create(@RequestBody OrderNewDto orderDto) {
+        OrderDetDto order = orderService.createOrder(orderDto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")

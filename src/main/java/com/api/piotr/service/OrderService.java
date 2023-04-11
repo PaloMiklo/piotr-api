@@ -1,16 +1,12 @@
 package com.api.piotr.service;
 
-import java.util.Set;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.api.piotr.dto.CartDetFullDto;
-import com.api.piotr.dto.CartLineDetDto;
-import com.api.piotr.dto.OrderDetFullDto;
-import com.api.piotr.dto.OrderDetLightDto;
+import com.api.piotr.dto.CartDetDto;
+import com.api.piotr.dto.OrderDetDto;
 import com.api.piotr.dto.OrderNewDto;
 import com.api.piotr.dto.OrderRowDto;
 import com.api.piotr.dto.PayedOptionDetDto;
@@ -43,43 +39,36 @@ public class OrderService {
                 return orderRepository.findAllOrders(pageable);
         }
 
-        public OrderDetFullDto getFullOrderById(Long id) {
-                OrderDetLightDto lighDetail = orderRepository.findOrderById(id)
-                                .orElseThrow(() -> new ResourceNotFoundException("Order", String.valueOf(id)));
+        public OrderDetDto getOrderById(Long orderId) {
+                OrderDetDto orderDetWthtLines = orderRepository.findOrderById(orderId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Order", String.valueOf(orderId)));
 
-                var cartId = lighDetail.cart().id();
+                CartDetDto cartWthLines = cartLineRepository.findCartLinesByOrderId(orderId)
+                                .map(cartLineDetDtos -> new CartDetDto(
+                                                orderDetWthtLines.cart().id(),
+                                                orderDetWthtLines.cart().freeShipping(),
+                                                orderDetWthtLines.cart().itemCount(),
+                                                orderDetWthtLines.cart().cartPrice(),
+                                                cartLineDetDtos))
+                                .orElseThrow(() -> new ResourceNotFoundException("CartLine", String.valueOf(orderId)));
 
-                Set<CartLineDetDto> cartLinesDetDto = cartLineRepository.findCartLinesByCartId(cartId)
-                                .orElseThrow(() -> new ResourceNotFoundException("CartLine", String.valueOf(id), "Cart",
-                                                String.valueOf(cartId)));
-
-                var cartDetFullDto = new CartDetFullDto(
-                                lighDetail.cart().id(),
-                                lighDetail.cart().freeShipping(),
-                                lighDetail.cart().itemCount(),
-                                lighDetail.cart().cartPrice(),
-                                cartLinesDetDto);
-
-                var orderFullDetail = new OrderDetFullDto(
-                                lighDetail.id(),
-                                lighDetail.customer(),
-                                lighDetail.deliveryOption(),
-                                lighDetail.billingOption(),
-                                lighDetail.created(),
-                                lighDetail.comment(),
-                                lighDetail.shippingAddress(),
-                                lighDetail.billingAddress(),
-                                cartDetFullDto);
-
-                return orderFullDetail;
+                return new OrderDetDto(orderDetWthtLines.id(),
+                                orderDetWthtLines.customer(),
+                                orderDetWthtLines.deliveryOption(),
+                                orderDetWthtLines.billingOption(),
+                                orderDetWthtLines.created(),
+                                orderDetWthtLines.comment(),
+                                orderDetWthtLines.shippingAddress(),
+                                orderDetWthtLines.billingAddress(),
+                                cartWthLines);
         }
 
-        public OrderDetLightDto getLightOrderById(Long id) {
+        public OrderDetDto getLightOrderById(Long id) {
                 return orderRepository.findOrderById(id)
                                 .orElseThrow(() -> new ResourceNotFoundException("Order", String.valueOf(id)));
         }
 
-        public OrderDetLightDto createOrder(OrderNewDto order) {
+        public OrderDetDto createOrder(OrderNewDto order) {
                 PayedOptionItem deliveryOptionItem = prepareDeliveryOptionItem("Payed delivery option", order);
                 PayedOptionItem billingOptionItem = prepareBillingOptionItem("Payed billing option", order);
 
@@ -88,6 +77,7 @@ public class OrderService {
                                 order.customer().getFirstName(),
                                 order.customer().getLastName(),
                                 order.customer().getEmail()));
+
                 var shippingAddress = addressRepository.save(order.shippingAddress());
                 var billingAddress = addressRepository.save(order.billingAddress());
 

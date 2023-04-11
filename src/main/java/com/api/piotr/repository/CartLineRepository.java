@@ -27,7 +27,8 @@ public interface CartLineRepository extends JpaRepository<CartLine, Long> {
                 cl.cart.id
                 )
             FROM CartLine cl
-            WHERE cl.cart.id = :cartId
+            JOIN Cart crt ON crt.orderTable.id = :orderId
+            WHERE cl.cart = crt.id
             """)
-    Optional<Set<CartLineDetDto>> findCartLinesByCartId(@Param("cartId") Long cartId);
+    Optional<Set<CartLineDetDto>> findCartLinesByOrderId(@Param("orderId") Long orderId);
 }
