@@ -15,8 +15,8 @@ Content-Type: application/json
     "lastName": "Smith",
     "email": "john_smith@gmail.com"
   },
-  "deliveryOptionItemCode": "2_DAY_SHIPPING",
-  "billingOptionItemCode": "GROUND_SHOPPING",
+  "deliveryOptionItemCode": "2_DAY_SHIPPING-SHIPPING",
+  "billingOptionItemCode": "CART-PAYMENT",
   "created": "2023-04-08T14:23:36.481",
   "comment": "This is a test order.",
   "shippingAddress": {
@@ -58,4 +58,4 @@ GET http://localhost:8080/api/order/list
 
 ###
 
-GET http://localhost:8080/api/order/3
+GET http://localhost:8080/api/order/1

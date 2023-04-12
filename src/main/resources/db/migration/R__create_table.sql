@@ -1,4 +1,4 @@
--- checksum 3369611937
+-- checksum 3002030999
 --DROP TABLES IF EXISTS
 DROP TABLE IF EXISTS public.cart_line CASCADE;
 
@@ -20,12 +20,12 @@ DROP TABLE IF EXISTS public.payed_option CASCADE;
 
 -- CREATE TABLES
 CREATE TABLE public.payed_option(
-  code VARCHAR(25) PRIMARY KEY,
+  code VARCHAR(50) PRIMARY KEY,
   name VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE public.payed_option_item(
-  code VARCHAR(25) PRIMARY KEY,
+  code VARCHAR(50) PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   payed_option VARCHAR(25) NOT NULL REFERENCES payed_option(code),
   price NUMERIC NOT NULL
@@ -69,8 +69,8 @@ CREATE TABLE public.cart (
 CREATE TABLE public.order_table (
   id SERIAL PRIMARY KEY,
   customer_id INTEGER NOT NULL REFERENCES customer(id),
-  delivery_option_item_code VARCHAR(25) NOT NULL REFERENCES payed_option_item(code),
-  billing_option_item_code VARCHAR(25) NOT NULL REFERENCES payed_option_item(code),
+  delivery_option_item_code VARCHAR(50) NOT NULL REFERENCES payed_option_item(code),
+  billing_option_item_code VARCHAR(50) NOT NULL REFERENCES payed_option_item(code),
   created_fe TIMESTAMP NOT NULL DEFAULT NOW(),
   comment TEXT,
   shipping_address INTEGER NOT NULL REFERENCES address(id),
@@ -141,25 +141,40 @@ ADD
 INSERT INTO
   public.payed_option (code, name)
 VALUES
-  ('STANDARD', 'Standard');
+  ('SHIPPING', 'Shipping');
 
 INSERT INTO
   public.payed_option (code, name)
 VALUES
-  ('EXPRESS', 'Express');
-
-INSERT INTO
-  public.payed_option (code, name)
-VALUES
-  ('PREMIUM', 'Premium');
+  ('PAYMENT', 'Payment');
 
 INSERT INTO
   public.payed_option_item (code, name, payed_option, price)
 VALUES
   (
-    'GROUND_SHOPPING',
+    'CART-PAYMENT',
+    'Cart payment',
+    'PAYMENT',
+    0
+  );
+
+INSERT INTO
+  public.payed_option_item (code, name, payed_option, price)
+VALUES
+  (
+    'CASH_ON_DELIVERY-PAYMENT',
+    'Cash on delivery',
+    'PAYMENT',
+    1.99
+  );
+
+INSERT INTO
+  public.payed_option_item (code, name, payed_option, price)
+VALUES
+  (
+    'GROUND-SHIPPING',
     'Ground Shipping',
-    'STANDARD',
+    'SHIPPING',
     5.99
   );
 
@@ -167,9 +182,9 @@ INSERT INTO
   public.payed_option_item (code, name, payed_option, price)
 VALUES
   (
-    '2_DAY_SHIPPING',
+    '2_DAY_SHIPPING-SHIPPING',
     '2-Day Shipping',
-    'EXPRESS',
+    'SHIPPING',
     15.99
   );
 
@@ -177,9 +192,9 @@ INSERT INTO
   public.payed_option_item (code, name, payed_option, price)
 VALUES
   (
-    'OVERNIGHT_SHIPPING',
+    'OVERNIGHT_SHIPPING-SHIPPING',
     'Overnight Shipping',
-    'PREMIUM',
+    'SHIPPING',
     29.99
   );
 
@@ -6931,8 +6946,8 @@ INSERT INTO
 VALUES
   (
     1,
-    'GROUND_SHOPPING',
-    'OVERNIGHT_SHIPPING',
+    'GROUND-SHIPPING',
+    'CART-PAYMENT',
     'Please deliver to front porch',
     1,
     2,
@@ -6951,8 +6966,8 @@ INSERT INTO
 VALUES
   (
     2,
-    'OVERNIGHT_SHIPPING',
-    '2_DAY_SHIPPING',
+    'OVERNIGHT_SHIPPING-SHIPPING',
+    'CASH_ON_DELIVERY-PAYMENT',
     2,
     1,
     2

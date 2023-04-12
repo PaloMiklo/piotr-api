@@ -63,4 +63,8 @@ public class Product {
         this.quantity = quantity;
         this.valid = true;
     }
+
+    public Product(Long id) {
+        this.id = id;
+    }
 }

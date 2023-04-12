@@ -46,16 +46,16 @@ public class ProductController {
     }
 
     @PostMapping(path = PRODUCT_CREATE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProductDetDto> create(
+    public ResponseEntity<Long> create(
             @RequestPart("image") MultipartFile image,
             @RequestPart("product") ProductNewDto productDto) {
-        ProductDetDto product = productService.createProduct(productDto, image);
+        Long productId = productService.createProduct(productDto, image);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(product.id())
+                .buildAndExpand(productId)
                 .toUri();
-        return ResponseEntity.created(location).body(product);
+        return ResponseEntity.created(location).body(productId);
     }
 
 }

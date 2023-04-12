@@ -23,4 +23,8 @@ public class PayedOption {
 
     @Column(nullable = false)
     private String name;
+
+    public PayedOption(String code) {
+        this.code = code;
+    }
 }
