@@ -15,6 +15,20 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT new com.api.piotr.dto.ProductRowDto(p.id) FROM Product p")
     Page<ProductRowDto> findAllProducts(Pageable pageable);
 
-    @Query("SELECT new com.api.piotr.dto.ProductDetDto(p.id) FROM Product p WHERE :id IS NULL OR p.id = :id")
+    @Query("""
+            SELECT new com.api.piotr.dto.ProductDetDto(
+                prod.id,
+                prod.name,
+                prod.price,
+                prod.description,
+                prod.quantity,
+                prod.valid
+            )
+            FROM Product prod
+            WHERE prod.id = :id
+            """)
     Optional<ProductDetDto> findProductById(@Param("id") Long id);
+
+    @Query("SELECT e FROM Product e WHERE e.id = :id")
+    Optional<Product> findProductByIdWithoutJpa(@Param("id") Long id);
 }

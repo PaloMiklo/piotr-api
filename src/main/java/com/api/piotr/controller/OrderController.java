@@ -44,13 +44,13 @@ public class OrderController {
     }
 
     @PostMapping(path = ORDER_CREATE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<OrderDetDto> create(@RequestBody OrderNewDto orderDto) {
-        OrderDetDto order = orderService.createOrder(orderDto);
+    public ResponseEntity<Long> create(@RequestBody OrderNewDto orderDto) {
+        Long orderId = orderService.createOrder(orderDto);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(order.id())
+                .buildAndExpand(orderId)
                 .toUri();
-        return ResponseEntity.created(location).body(order);
+        return ResponseEntity.created(location).body(orderId);
     }
 }

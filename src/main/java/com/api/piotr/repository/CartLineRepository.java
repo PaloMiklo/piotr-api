@@ -7,12 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.api.piotr.dto.CartLineDetDto;
+import com.api.piotr.dto.CartLineRowDto;
 import com.api.piotr.entity.CartLine;
 
 public interface CartLineRepository extends JpaRepository<CartLine, Long> {
     @Query("""
-            SELECT new com.api.piotr.dto.CartLineDetDto(
+            SELECT new com.api.piotr.dto.CartLineRowDto(
                 cl.id,
                 new com.api.piotr.dto.ProductDetDto(
                     cl.product.id,
@@ -23,12 +23,12 @@ public interface CartLineRepository extends JpaRepository<CartLine, Long> {
                     cl.product.valid
                 ),
                 cl.amount,
-                cl.lineTotal,
-                cl.cart.id
+                cl.lineTotal
                 )
             FROM CartLine cl
-            JOIN Cart crt ON crt.orderTable.id = :orderId
+            JOIN OrderTable ordr ON ordr.id = :orderId
+            JOIN Cart crt ON crt.id = ordr.cart.id
             WHERE cl.cart = crt.id
             """)
-    Optional<Set<CartLineDetDto>> findCartLinesByOrderId(@Param("orderId") Long orderId);
+    Optional<Set<CartLineRowDto>> findCartLinesByOrderId(@Param("orderId") Long orderId);
 }

@@ -8,13 +8,13 @@ public record CartDetDto(
                 Boolean freeShipping,
                 Integer itemCount,
                 BigDecimal cartPrice,
-                Set<CartLineDetDto> lines) {
+                Set<CartLineRowDto> lines) {
         public CartDetDto(
                         Long id,
                         Boolean freeShipping,
                         Integer itemCount,
                         BigDecimal cartPrice,
-                        Set<CartLineDetDto> lines) {
+                        Set<CartLineRowDto> lines) {
                 this.id = id;
                 this.freeShipping = freeShipping;
                 this.itemCount = itemCount;

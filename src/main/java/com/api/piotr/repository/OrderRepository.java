@@ -18,7 +18,7 @@ public interface OrderRepository extends JpaRepository<OrderTable, Long> {
 
     @Query("""
             SELECT new com.api.piotr.dto.OrderDetDto(
-                ord.id,
+                ordr.id,
                 new com.api.piotr.dto.CustomerDetDto(
                     cust.id,
                     cust.firstName,
@@ -37,8 +37,8 @@ public interface OrderRepository extends JpaRepository<OrderTable, Long> {
                     billOpt.code,
                     billOptItem.price
                 ),
-                ord.created,
-                ord.comment,
+                ordr.created,
+                ordr.comment,
                 new com.api.piotr.dto.AddressDetDto(
                     shipAddr.id,
                     shipAddr.street,
@@ -62,16 +62,16 @@ public interface OrderRepository extends JpaRepository<OrderTable, Long> {
                     crt.cartPrice
                 )
             )
-            FROM OrderTable ord
-            JOIN PayedOptionItem delOptItem ON delOptItem.code = ord.deliveryOption.code
-            JOIN PayedOptionItem billOptItem ON billOptItem.code = ord.billingOption.code
+            FROM OrderTable ordr
+            JOIN PayedOptionItem delOptItem ON delOptItem.code = ordr.deliveryOption.code
+            JOIN PayedOptionItem billOptItem ON billOptItem.code = ordr.billingOption.code
             JOIN PayedOption delOpt ON delOpt.code = delOptItem.payedOption
             JOIN PayedOption billOpt ON billOpt.code = billOptItem.payedOption
-            JOIN Customer cust ON cust.id = ord.customer.id
-            JOIN Cart crt ON crt.orderTable.id = ord.id
-            JOIN Address shipAddr ON shipAddr.id = ord.shippingAddress.id
-            JOIN Address billAddr ON billAddr.id = ord.billingAddress.id
-            WHERE ord.id = :id
+            JOIN Customer cust ON cust.id = ordr.customer.id
+            JOIN Cart crt ON ordr.cart.id = crt.id
+            JOIN Address shipAddr ON shipAddr.id = ordr.shippingAddress.id
+            JOIN Address billAddr ON billAddr.id = ordr.billingAddress.id
+            WHERE ordr.id = :id
             """)
     Optional<OrderDetDto> findOrderById(@Param("id") Long id);
 }

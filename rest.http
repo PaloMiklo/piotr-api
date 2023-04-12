@@ -10,9 +10,7 @@ POST http://localhost:8080/api/order
 Content-Type: application/json
 
 {
-  "id": null,
   "customer": {
-    "id": null,
     "firstName": "John",
     "lastName": "Smith",
     "email": "john_smith@gmail.com"
@@ -22,7 +20,6 @@ Content-Type: application/json
   "created": "2023-04-08T14:23:36.481",
   "comment": "This is a test order.",
   "shippingAddress": {
-    "id": null,
     "street": "Main Street",
     "houseNumber": "123",
     "zipCode": "12345",
@@ -30,12 +27,28 @@ Content-Type: application/json
     "country": "USA"
   },
   "billingAddress": {
-    "id": null,
     "street": "Quiet Street",
     "houseNumber": "456",
     "zipCode": "54321",
     "city": "New York",
     "country": "USA"
+  },
+  "cart": {
+    "freeShipping": true,
+    "itemCount": 2,
+    "cartPrice": 109.98,
+    "lines": [
+      {
+        "productId": 1,
+        "amount": 1,
+        "lineTotal": 19.99
+      },
+      {
+        "productId": 3,
+        "amount": 1,
+        "lineTotal": 89.99
+      }
+    ] 
   }
 }
 
@@ -45,4 +58,4 @@ GET http://localhost:8080/api/order/list
 
 ###
 
-GET http://localhost:8080/api/order/1
+GET http://localhost:8080/api/order/3

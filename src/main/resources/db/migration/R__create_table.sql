@@ -59,6 +59,13 @@ CREATE TABLE public.address (
   country VARCHAR(255) NOT NULL
 );
 
+CREATE TABLE public.cart (
+  id SERIAL PRIMARY KEY,
+  free_shipping BOOLEAN NOT NULL,
+  item_count INTEGER NOT NULL,
+  cart_price NUMERIC(10, 2) NOT NULL
+);
+
 CREATE TABLE public.order_table (
   id SERIAL PRIMARY KEY,
   customer_id INTEGER NOT NULL REFERENCES customer(id),
@@ -67,15 +74,8 @@ CREATE TABLE public.order_table (
   created_fe TIMESTAMP NOT NULL DEFAULT NOW(),
   comment TEXT,
   shipping_address INTEGER NOT NULL REFERENCES address(id),
-  billing_address INTEGER NOT NULL REFERENCES address(id)
-);
-
-CREATE TABLE public.cart (
-  id SERIAL PRIMARY KEY,
-  free_shipping BOOLEAN NOT NULL,
-  item_count INTEGER NOT NULL,
-  cart_price NUMERIC(10, 2) NOT NULL,
-  order_id INTEGER NOT NULL REFERENCES order_table(id)
+  billing_address INTEGER NOT NULL REFERENCES address(id),
+  cart INTEGER NOT NULL REFERENCES cart(id)
 );
 
 CREATE TABLE public.cart_line (
@@ -123,6 +123,11 @@ ADD
   CONSTRAINT fk_order_billing_address FOREIGN KEY (billing_address) REFERENCES public.address(id);
 
 ALTER TABLE
+  public.order_table
+ADD
+  CONSTRAINT fk_order_cart FOREIGN KEY (cart) REFERENCES public.cart(id);
+
+ALTER TABLE
   public.cart_line
 ADD
   CONSTRAINT fk_cart_line_product FOREIGN KEY (product_id) REFERENCES public.product(id);
@@ -131,11 +136,6 @@ ALTER TABLE
   public.cart_line
 ADD
   CONSTRAINT fk_cart_line_cart FOREIGN KEY (cart) REFERENCES public.cart(id);
-
-ALTER TABLE
-  public.cart
-ADD
-  CONSTRAINT fk_cart_order_table FOREIGN KEY (order_id) REFERENCES public.order_table(id);
 
 -- INSERT MOCK DATA
 INSERT INTO
@@ -6901,13 +6901,32 @@ VALUES
   ('Broadway', '456', '67890', 'Los Angeles', 'USA');
 
 INSERT INTO
+  public.cart (
+    free_shipping,
+    item_count,
+    cart_price
+  )
+VALUES
+  (FALSE, 2, 39.98);
+
+INSERT INTO
+  public.cart (
+    free_shipping,
+    item_count,
+    cart_price
+  )
+VALUES
+  (FALSE, 1, 59.98);
+
+INSERT INTO
   public.order_table (
     customer_id,
     delivery_option_item_code,
     billing_option_item_code,
     comment,
     shipping_address,
-    billing_address
+    billing_address,
+    cart
   )
 VALUES
   (
@@ -6916,7 +6935,8 @@ VALUES
     'OVERNIGHT_SHIPPING',
     'Please deliver to front porch',
     1,
-    2
+    2,
+    1
   );
 
 INSERT INTO
@@ -6925,30 +6945,18 @@ INSERT INTO
     delivery_option_item_code,
     billing_option_item_code,
     shipping_address,
-    billing_address
+    billing_address,
+    cart
   )
 VALUES
-  (2, 'OVERNIGHT_SHIPPING', '2_DAY_SHIPPING', 2, 2);
-
-INSERT INTO
-  public.cart (
-    free_shipping,
-    item_count,
-    cart_price,
-    order_id
-  )
-VALUES
-  (FALSE, 2, 39.98, 1);
-
-INSERT INTO
-  public.cart (
-    free_shipping,
-    item_count,
-    cart_price,
-    order_id
-  )
-VALUES
-  (FALSE, 1, 59.98, 2);
+  (
+    2,
+    'OVERNIGHT_SHIPPING',
+    '2_DAY_SHIPPING',
+    2,
+    1,
+    2
+  );
 
 INSERT INTO
   public.cart_line (product_id, amount, line_total, cart)
