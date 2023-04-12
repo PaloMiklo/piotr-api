@@ -23,9 +23,10 @@ public class PayedOptionItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
+    @Column(length = 50)
     private String code;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 255)
     private String name;
 
     @ManyToOne

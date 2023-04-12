@@ -27,7 +27,7 @@ CREATE TABLE public.payed_option(
 CREATE TABLE public.payed_option_item(
   code VARCHAR(50) PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
-  payed_option VARCHAR(25) NOT NULL REFERENCES payed_option(code),
+  payed_option VARCHAR(50) NOT NULL REFERENCES payed_option(code),
   price NUMERIC NOT NULL
 );
 
@@ -54,7 +54,7 @@ CREATE TABLE public.address (
   id SERIAL PRIMARY KEY,
   street VARCHAR(255) NOT NULL,
   house_number VARCHAR(255) NOT NULL,
-  zip_code VARCHAR(255) NOT NULL,
+  zip_code VARCHAR(10) NOT NULL,
   city VARCHAR(255) NOT NULL,
   country VARCHAR(255) NOT NULL
 );
