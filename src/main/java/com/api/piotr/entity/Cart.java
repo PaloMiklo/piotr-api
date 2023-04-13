@@ -10,7 +10,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,7 +41,6 @@ public class Cart {
     private BigDecimal cartPrice;
 
     @OneToOne(mappedBy = "cart", orphanRemoval = true)
-    @PrimaryKeyJoinColumn
     private OrderTable orderTable;
 
     @OneToMany(mappedBy = "cart", orphanRemoval = true)
