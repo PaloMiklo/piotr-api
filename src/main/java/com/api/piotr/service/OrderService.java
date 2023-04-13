@@ -1,5 +1,7 @@
 package com.api.piotr.service;
 
+import static com.api.piotr.util.PayedOptionItemWrite.createInstance;
+
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,7 +24,6 @@ import com.api.piotr.repository.CartLineRepository;
 import com.api.piotr.repository.CartRepository;
 import com.api.piotr.repository.CustomerRepository;
 import com.api.piotr.repository.OrderRepository;
-import com.api.piotr.util.PayedOptionItemWrite;
 
 import lombok.AllArgsConstructor;
 
@@ -78,7 +79,7 @@ public class OrderService {
                                 .build()));
 
                 var savedLines = cartLineRepository.saveAll(order.cart().lines()
-                                .stream().parallel().map(cartLineNewDto -> {
+                                .stream().map(cartLineNewDto -> {
                                         return cartLineNewDto.toEntity(cartLineNewDto.productId(), savedCart);
                                 }).collect(Collectors.toList()));
 
@@ -91,8 +92,8 @@ public class OrderService {
 
                 var finalOrder = new OrderTable();
                 finalOrder.setCustomer(savedCustomer);
-                finalOrder.setDeliveryOption(PayedOptionItemWrite.createInstance(order.deliveryOptionItemCode()));
-                finalOrder.setBillingOption(PayedOptionItemWrite.createInstance(order.billingOptionItemCode()));
+                finalOrder.setDeliveryOption(createInstance(order.deliveryOptionItemCode()));
+                finalOrder.setBillingOption(createInstance(order.billingOptionItemCode()));
                 finalOrder.setCreated(order.created());
                 finalOrder.setComment(order.comment());
                 finalOrder.setShippingAddress(savedAddresses.get(0));

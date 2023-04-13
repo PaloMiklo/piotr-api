@@ -1,5 +1,7 @@
 package com.api.piotr.service;
 
+import static com.api.piotr.util.GetApply.getApply;
+
 import java.io.IOException;
 
 import org.springframework.data.domain.Page;
@@ -36,14 +38,13 @@ public class ProductService {
     }
 
     public Long createProduct(ProductNewDto product, MultipartFile image) {
-        Product newProduct = product.toEntity();
+        Product newProduct = null;
         try {
-            ImageTable imageTable = new ImageTable(null, image.getBytes());
-            newProduct.setImage(imageTable);
+            var imageTable = new ImageTable(null, image.getBytes());
+            newProduct = getApply(product.toEntity(), e -> e.setImage(imageTable));
         } catch (IOException ex) {
             throw new ProcessingException("image", ex);
         }
         return productRepository.save(newProduct).getId();
     }
-
 }

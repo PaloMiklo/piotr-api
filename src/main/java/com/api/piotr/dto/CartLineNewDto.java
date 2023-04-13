@@ -1,5 +1,7 @@
 package com.api.piotr.dto;
 
+import static com.api.piotr.dsl.IdReference.createIdRef;
+
 import java.math.BigDecimal;
 
 import com.api.piotr.entity.Cart;
@@ -14,7 +16,7 @@ public record CartLineNewDto(
         var cartLine = new CartLine();
         cartLine.setAmount(amount);
         cartLine.setLineTotal(lineTotal);
-        cartLine.setProduct(new Product(productId));
+        cartLine.setProduct(createIdRef(Product.class, productId));
         cartLine.setCart(cart);
         return cartLine;
     }

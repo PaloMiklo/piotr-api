@@ -5,6 +5,8 @@ import java.util.Set;
 
 import org.springframework.lang.Nullable;
 
+import com.api.piotr.dsl.IdReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -26,7 +28,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Product {
+public class Product implements IdReference {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,9 +64,5 @@ public class Product {
         this.description = description;
         this.quantity = quantity;
         this.valid = true;
-    }
-
-    public Product(Long id) {
-        this.id = id;
     }
 }

@@ -1,5 +1,7 @@
 package com.api.piotr.entity;
 
+import com.api.piotr.dsl.CodeReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -9,13 +11,15 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "payed_option")
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class PayedOption {
+public class PayedOption implements CodeReference {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
@@ -24,8 +28,4 @@ public class PayedOption {
 
     @Column(nullable = false, length = 255)
     private String name;
-
-    public PayedOption(String code) {
-        this.code = code;
-    }
 }
