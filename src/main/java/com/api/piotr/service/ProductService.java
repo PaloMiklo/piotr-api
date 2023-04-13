@@ -45,6 +45,6 @@ public class ProductService {
         } catch (IOException ex) {
             throw new ProcessingException("image", ex);
         }
-        return productRepository.save(newProduct).getId();
+        return productRepository.persist(newProduct).getId();
     }
 }

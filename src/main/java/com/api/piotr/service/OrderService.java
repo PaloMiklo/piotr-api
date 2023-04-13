@@ -66,26 +66,26 @@ public class OrderService {
         }
 
         public Long createOrder(OrderNewDto order) {
-                var savedCustomer = customerRepository.save((Customer.builder()
+                var savedCustomer = customerRepository.persist((Customer.builder()
                                 .firstName(order.customer().firstName())
                                 .lastName(order.customer().lastName())
                                 .email(order.customer().email()))
                                 .build());
 
-                var savedCart = cartRepository.save((Cart.builder()
+                var savedCart = cartRepository.persist((Cart.builder()
                                 .freeShipping(order.cart().freeShipping())
                                 .itemCount(order.cart().itemCount())
                                 .cartPrice(order.cart().cartPrice())
                                 .build()));
 
-                var savedLines = cartLineRepository.saveAll(order.cart().lines()
+                var savedLines = cartLineRepository.persistAll(order.cart().lines()
                                 .stream().map(cartLineNewDto -> {
                                         return cartLineNewDto.toEntity(cartLineNewDto.productId(), savedCart);
                                 }).collect(Collectors.toList()));
 
                 savedCart.setLines(savedLines);
 
-                var savedAddresses = addressRepository.saveAll(
+                var savedAddresses = addressRepository.persistAll(
                                 Stream.of(order.shippingAddress(), order.billingAddress())
                                                 .map(AddressNewDto::toEntity)
                                                 .collect(Collectors.toList()));
@@ -100,6 +100,6 @@ public class OrderService {
                 finalOrder.setBillingAddress(savedAddresses.get(1));
                 finalOrder.setCart(savedCart);
 
-                return orderRepository.save(finalOrder).getId();
+                return orderRepository.persist(finalOrder).getId();
         }
 }

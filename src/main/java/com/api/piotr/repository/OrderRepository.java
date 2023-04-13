@@ -12,7 +12,7 @@ import com.api.piotr.dto.OrderDetDto;
 import com.api.piotr.dto.OrderRowDto;
 import com.api.piotr.entity.OrderTable;
 
-public interface OrderRepository extends JpaRepository<OrderTable, Long> {
+public interface OrderRepository extends _HibernateRepository<OrderTable>, JpaRepository<OrderTable, Long> {
     @Query("SELECT new com.api.piotr.dto.OrderRowDto(o.id) FROM OrderTable o")
     Page<OrderRowDto> findAllOrders(Pageable pageable);
 
