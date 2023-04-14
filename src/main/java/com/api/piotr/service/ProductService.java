@@ -1,6 +1,6 @@
 package com.api.piotr.service;
 
-import static com.api.piotr.util.GetApply.getApply;
+import static com.api.piotr.util.Utils.getApply;
 
 import java.io.IOException;
 

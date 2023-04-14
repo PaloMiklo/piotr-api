@@ -5,6 +5,9 @@ import static com.api.piotr.dsl.CodeReference.createCodeRef;
 import com.api.piotr.entity.PayedOption;
 import com.api.piotr.entity.PayedOptionItem;
 
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class PayedOptionItemWrite {
     public static PayedOptionItem createInstance(String payedOptionItemCode) {
         return new PayedOptionItem(payedOptionItemCode,
