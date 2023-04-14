@@ -15,16 +15,13 @@ public class Utils {
         return entity;
     }
 
-    public static <T> T rethrow(String message, boolean wrapRuntimeToo, ThrowingSupplier<T> f) {
+    public static <T> T rethrow(String message, ThrowingSupplier<T> f) {
         try {
             return f.get();
         } catch (VirtualMachineError | ThreadDeath | LinkageError e) {
             throw sneakyThrow(e);
         } catch (RuntimeException e) {
-            if (wrapRuntimeToo)
-                throw new RuntimeException(message, e);
-            else
-                throw e;
+            throw new RuntimeException(message, e);
         } catch (Throwable e) {
             throw new RuntimeException(message, e);
         }

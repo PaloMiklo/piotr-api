@@ -1,15 +1,18 @@
 package com.api.piotr.controller;
 
+import static com.api.piotr.ObjectRandomizer.getRandomObject;
 import static com.api.piotr.constant.ApiPaths.ORDER_LIST;
 import static com.api.piotr.constant.ApiPaths.ORDER_PATH;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -23,8 +26,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.api.piotr.dto.OrderDetDto;
 import com.api.piotr.dto.OrderRowDto;
 import com.api.piotr.service.OrderService;
 
@@ -55,4 +60,27 @@ public class OrderControllerTest {
         verifyNoMoreInteractions(orderService);
     }
 
+    @Test
+    public void testGetOrderById() throws Exception {
+        OrderDetDto order = getRandomObject(OrderDetDto.class);
+
+        given(orderService.getOrderById(anyLong())).willReturn(order);
+
+        mockMvc.perform(get(ORDER_PATH + "/{id}", 1L))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id").exists())
+                .andExpect(jsonPath("$.customer").exists())
+                .andExpect(jsonPath("$.deliveryOption").exists())
+                .andExpect(jsonPath("$.billingOption").exists())
+                .andExpect(jsonPath("$.created").exists())
+                .andExpect(jsonPath("$.comment").exists())
+                .andExpect(jsonPath("$.shippingAddress").exists())
+                .andExpect(jsonPath("$.billingAddress").exists())
+                .andExpect(jsonPath("$.cart.id").exists())
+                .andExpect(jsonPath("$.cart.freeShipping").exists())
+                .andExpect(jsonPath("$.cart.itemCount").exists())
+                .andExpect(jsonPath("$.cart.cartPrice").exists())
+                .andExpect(jsonPath("$.cart.lines").isArray());
+    }
 }

@@ -10,7 +10,6 @@ public interface IdReference {
     public static <T extends IdReference> T createIdRef(Class<T> entity, Long id) {
         return rethrow(
                 String.format("Failed to create a reference for entity %s with id %d!", entity.getName(), id),
-                true,
                 () -> getApply(entity.getDeclaredConstructor().newInstance(), e -> e.setId(id)));
     }
 }
