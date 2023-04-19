@@ -17,7 +17,7 @@ public class ObjectRandomizerTest {
     public void testGetRandomObject() throws IllegalAccessException, InstantiationException,
             IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException,
             NoSuchFieldException {
-        var myObject = ObjectRandomizer.getRandomObject(TestClass.class);
+        var myObject = ObjectRandomizer.generateRandomObject(TestClass.class);
         assertNotNull(myObject.getName());
         assertNotNull(myObject.getAge());
         assertNotNull(myObject.getOther());

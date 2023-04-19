@@ -35,7 +35,7 @@ import com.api.piotr.util.Utils;
 public class ObjectRandomizer {
     private static Random random = new Random();
 
-    public static <T> T getRandomObject(Class<T> clazz) throws InstantiationException, IllegalAccessException,
+    public static <T> T generateRandomObject(Class<T> clazz) throws InstantiationException, IllegalAccessException,
             IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException,
             NoSuchFieldException {
 
@@ -63,58 +63,74 @@ public class ObjectRandomizer {
             for (Field field : fields) {
                 Class<?> fieldType = field.getType();
                 field.setAccessible(true);
-
-                if (fieldType.equals(String.class)) {
-                    field.set(object, generateRandomString(10));
-                } else if (fieldType.equals(Integer.class) || fieldType.equals(int.class)) {
-                    field.set(object, random.nextInt());
-                } else if (fieldType.equals(Long.class) || fieldType.equals(long.class)) {
-                    field.set(object, random.nextLong());
-                } else if (fieldType.equals(Double.class) || fieldType.equals(double.class)) {
-                    field.set(object, random.nextDouble());
-                } else if (fieldType.equals(Float.class) || fieldType.equals(float.class)) {
-                    field.set(object, random.nextFloat());
-                } else if (fieldType.equals(Boolean.class) ||
-                        fieldType.equals(boolean.class)) {
-                    field.set(object, random.nextBoolean());
-                } else if (fieldType.equals(BigDecimal.class)) {
-                    field.set(object, BigDecimal.valueOf(random.nextLong()));
-                } else if (fieldType.equals(Date.class)) {
-                    field.set(object, new Date(random.nextLong()));
-                } else if (fieldType.isArray()) {
-                    var elementType = fieldType.getComponentType();
-                    if (elementType.equals(Byte.class))
-                        field.set(object, (random() * Byte.MAX_VALUE));
-                } else if (fieldType.equals(LocalDate.class)) {
-                    field.set(object, LocalDate.now());
-                } else if (fieldType.equals(LocalTime.class)) {
-                    field.set(object, LocalTime.now());
-                } else if (fieldType.equals(LocalDateTime.class)) {
-                    field.set(object, LocalDateTime.now());
-                } else if (fieldType.equals(Instant.class)) {
-                    field.set(object, ZonedDateTime.now().toInstant());
-                } else if (fieldType.equals(UUID.class)) {
-                    field.set(object, randomUUID());
-                } else if (fieldType.equals(Optional.class)) {
-                    field.set(object, Optional.empty());
-                } else if (fieldType.equals(List.class) | fieldType.equals(ArrayList.class)) {
-                    field.set(object, new ArrayList<>());
-                } else if (fieldType.equals(Set.class)) {
-                    field.set(object, new HashSet<>());
-                } else if (fieldType.equals(Map.class)) {
-                    field.set(object, new HashMap<>());
-                } else if (fieldType.equals(PayedOption.class)) {
-                    field.set(object, new PayedOption("PAYMENT", "payment"));
-                } else if (fieldType.equals(PayedOptionItem.class)) {
-                    field.set(object,
-                            PayedOptionItemWrite.createInstance("2_DAY_SHIPPING-SHIPPING"));
-                } else if (fieldType.isEnum()) {
-                    var constants = fieldType.getEnumConstants();
-                    field.set(object, floor(random() * constants.length));
-                } else {
-                    Object nestedObject = fieldType.getDeclaredConstructor().newInstance();
-                    var val = randomizeObjectFields(nestedObject);
-                    field.set(object, val);
+                switch (fieldType.getSimpleName()) {
+                    case "String":
+                        field.set(object, generateRandomString(10));
+                        break;
+                    case "Integer":
+                    case "int":
+                        field.set(object, random.nextInt());
+                        break;
+                    case "Long":
+                    case "long":
+                        field.set(object, random.nextLong());
+                        break;
+                    case "Double":
+                    case "double":
+                        field.set(object, random.nextDouble());
+                        break;
+                    case "Float":
+                    case "float":
+                        field.set(object, random.nextFloat());
+                        break;
+                    case "Boolean":
+                    case "boolean":
+                        field.set(object, random.nextBoolean());
+                        break;
+                    case "BigDecimal":
+                        field.set(object, BigDecimal.valueOf(random.nextLong()));
+                        break;
+                    case "Date":
+                        field.set(object, new Date(random.nextLong()));
+                        break;
+                    case "LocalDate":
+                        field.set(object, LocalDate.now());
+                        break;
+                    case "LocalTime":
+                        field.set(object, LocalTime.now());
+                        break;
+                    case "LocalDateTime":
+                        field.set(object, LocalDateTime.now());
+                        break;
+                    case "Instant":
+                        field.set(object, ZonedDateTime.now().toInstant());
+                        break;
+                    case "UUID":
+                        field.set(object, randomUUID());
+                        break;
+                    case "Optional":
+                        field.set(object, Optional.empty());
+                        break;
+                    case "List":
+                    case "ArrayList":
+                        field.set(object, new ArrayList<>());
+                        break;
+                    case "Set":
+                        field.set(object, new HashSet<>());
+                        break;
+                    case "Map":
+                        field.set(object, new HashMap<>());
+                        break;
+                    case "PayedOption":
+                        field.set(object, new PayedOption("PAYMENT", "payment"));
+                        break;
+                    case "PayedOptionItem":
+                        field.set(object, PayedOptionItemWrite.createInstance("2_DAY_SHIPPING-SHIPPING"));
+                        break;
+                    default:
+                        Object nestedObject = fieldType.getDeclaredConstructor().newInstance();
+                        var val = randomizeObjectFields(nestedObject);
+                        field.set(object, val);
                 }
             }
             return (T) object;
@@ -125,70 +141,93 @@ public class ObjectRandomizer {
         return Utils.rethrow("Failed to randomize record field!", () -> {
             Class<?> type = component.getType();
             Object value = null;
-            if (type == String.class) {
-                value = generateRandomString(10);
-            } else if (type == Integer.class || type == int.class) {
-                value = random.nextInt();
-            } else if (type == Long.class || type == long.class) {
-                value = random.nextLong();
-            } else if (type == Double.class || type == double.class) {
-                value = random.nextDouble();
-            } else if (type == Float.class || type == float.class) {
-                value = random.nextFloat();
-            } else if (type == Boolean.class || type == boolean.class) {
-                value = random.nextBoolean();
-            } else if (type == BigDecimal.class) {
-                value = BigDecimal.valueOf(random.nextLong());
-            } else if (type == Date.class) {
-                value = new Date(random.nextLong());
-            } else if (type == String.class) {
-                var elementType = type.getComponentType();
-                if (elementType.equals(Byte.class))
-                    value = (random() * Byte.MAX_VALUE);
-            } else if (type == LocalDate.class) {
-                value = LocalDate.now();
-            } else if (type == LocalTime.class) {
-                value = LocalTime.now();
-            } else if (type == LocalDateTime.class) {
-                value = LocalDateTime.now();
-            } else if (type == Instant.class) {
-                value = ZonedDateTime.now().toInstant();
-            } else if (type == UUID.class) {
-                value = randomUUID();
-            } else if (type == Optional.class) {
-                value = Optional.empty();
-            } else if (type == List.class | type.equals(ArrayList.class)) {
-                value = new ArrayList<>();
-            } else if (type == Set.class) {
-                value = new HashSet<>();
-            } else if (type == Map.class) {
-                value = new HashMap<>();
-            } else if (type == PayedOption.class) {
-                value = new PayedOption("PAYMENT", "payment");
-            } else if (type == PayedOptionItem.class) {
-                value = PayedOptionItemWrite.createInstance("2_DAY_SHIPPING-SHIPPING");
-            } else if (type.isEnum()) {
-                var constants = type.getEnumConstants();
-                value = floor(random() * constants.length);
-            } else {
-                try {
-                    Class<?> nestedRecord = type;
-                    Constructor<?> nestedRecordCnstrctr = nestedRecord.getDeclaredConstructor(
-                            Arrays.stream(nestedRecord.getRecordComponents())
-                                    .map(recordComponent -> recordComponent.getType()).toArray(Class<?>[]::new));
+            switch (type.getSimpleName()) {
+                case "String":
+                    value = generateRandomString(10);
+                    break;
+                case "Integer":
+                case "int":
+                    value = random.nextInt();
+                    break;
+                case "Long":
+                case "long":
+                    value = random.nextLong();
+                    break;
+                case "Double":
+                case "double":
+                    value = random.nextDouble();
+                    break;
+                case "Float":
+                case "float":
+                    value = random.nextFloat();
+                    break;
+                case "Boolean":
+                case "boolean":
+                    value = random.nextBoolean();
+                    break;
+                case "BigDecimal":
+                    value = BigDecimal.valueOf(random.nextLong());
+                    break;
+                case "Date":
+                    value = new Date(random.nextLong());
+                    break;
+                case "LocalDate":
+                    value = LocalDate.now();
+                    break;
+                case "LocalTime":
+                    value = LocalTime.now();
+                    break;
+                case "LocalDateTime":
+                    value = LocalDateTime.now();
+                    break;
+                case "Instant":
+                    value = ZonedDateTime.now().toInstant();
+                    break;
+                case "UUID":
+                    value = randomUUID();
+                    break;
+                case "Optional":
+                    value = Optional.empty();
+                    break;
+                case "List":
+                case "ArrayList":
+                    value = new ArrayList<>();
+                    break;
+                case "Set":
+                    value = new HashSet<>();
+                    break;
+                case "Map":
+                    value = new HashMap<>();
+                    break;
+                default:
+                    if (type == PayedOption.class) {
+                        value = new PayedOption("PAYMENT", "payment");
+                    } else if (type == PayedOptionItem.class) {
+                        value = PayedOptionItemWrite.createInstance("2_DAY_SHIPPING-SHIPPING");
+                    } else if (type.isEnum()) {
+                        var constants = type.getEnumConstants();
+                        value = floor(random() * constants.length);
+                    } else {
+                        try {
+                            Class<?> nestedRecord = type;
+                            Constructor<?> nestedRecordCnstrctr = nestedRecord.getDeclaredConstructor(
+                                    Arrays.stream(nestedRecord.getRecordComponents())
+                                            .map(recordComponent -> recordComponent.getType())
+                                            .toArray(Class<?>[]::new));
 
-                    Object[] nestedRecordCnstrctrArgs = Arrays.stream(nestedRecord.getRecordComponents())
-                            .map(recordComponent -> randomizeRecordFields(recordComponent))
-                            .toArray(Object[]::new);
+                            Object[] nestedRecordCnstrctrArgs = Arrays.stream(nestedRecord.getRecordComponents())
+                                    .map(recordComponent -> randomizeRecordFields(recordComponent))
+                                    .toArray(Object[]::new);
 
-                    Object recordInstance = nestedRecordCnstrctr.newInstance(nestedRecordCnstrctrArgs);
+                            Object recordInstance = nestedRecordCnstrctr.newInstance(nestedRecordCnstrctrArgs);
 
-                    value = recordInstance;
-                } catch (NoSuchMethodException e) {
-                    throw new RuntimeException(
-                            "The nested object doesn't have a no-argument constructor, so it is not possible to create a new instance! "
-                                    + e.getMessage());
-                }
+                            value = recordInstance;
+                        } catch (NoSuchMethodException e) {
+                            throw new RuntimeException(
+                                    "The nested object doesn't have a no-argument constructor, so it is not possible to create a new instance! "
+                                            + e.getMessage());
+                        }
+                    }
             }
             return value;
         });
