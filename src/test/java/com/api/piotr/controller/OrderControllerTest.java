@@ -1,12 +1,13 @@
 package com.api.piotr.controller;
 
-import static com.api.piotr.ObjectRandomizer.generateRandomObject;
 import static com.api.piotr.constant.ApiPaths.ORDER_CREATE;
 import static com.api.piotr.constant.ApiPaths.ORDER_LIST;
 import static com.api.piotr.constant.ApiPaths.ORDER_PATH;
+import static com.api.piotr.util.ObjectRandomizer.generateRandomObject;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -21,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,58 +55,68 @@ public class OrderControllerTest {
     private OrderService orderService;
 
     @Test
-    public void testGetAllOrders() throws Exception {
-        List<OrderRowDto> ordersList = new ArrayList<>();
-        ordersList.add(new OrderRowDto(1L));
-        ordersList.add(new OrderRowDto(2L));
+    public void getAllOrders() throws Exception {
+        assertTimeout(Duration.ofMillis(100), () -> {
+            List<OrderRowDto> ordersList = new ArrayList<>();
+            ordersList.add(new OrderRowDto(1L));
+            ordersList.add(new OrderRowDto(2L));
 
-        given(orderService.getAllOrders(any(Pageable.class))).willReturn(new PageImpl<>(ordersList));
+            given(orderService.getAllOrders(any(Pageable.class))).willReturn(new PageImpl<>(ordersList));
 
-        mockMvc.perform(get(ORDER_PATH + ORDER_LIST))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(2)))
-                .andExpect(jsonPath("$.content[0].id", is(1)))
-                .andExpect(jsonPath("$.content[1].id", is(2)));
+            mockMvc.perform(get(ORDER_PATH + ORDER_LIST))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.content", hasSize(2)))
+                    .andExpect(jsonPath("$.content[0].id", is(1)))
+                    .andExpect(jsonPath("$.content[1].id", is(2)));
 
-        verify(orderService, times(1)).getAllOrders(any(Pageable.class));
-        verifyNoMoreInteractions(orderService);
+            verify(orderService, times(1)).getAllOrders(any(Pageable.class));
+            verifyNoMoreInteractions(orderService);
+        });
     }
 
     @Test
-    public void testGetOrderById() throws Exception {
-        given(orderService.getOrderById(anyLong())).willReturn(generateRandomObject(OrderDetDto.class));
+    public void getOrderById() throws Exception {
+        assertTimeout(Duration.ofMillis(100), () -> {
+            given(orderService.getOrderById(anyLong())).willReturn(generateRandomObject(OrderDetDto.class));
 
-        mockMvc.perform(get(ORDER_PATH + "/{id}", 1L))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.customer").exists())
-                .andExpect(jsonPath("$.deliveryOption").exists())
-                .andExpect(jsonPath("$.billingOption").exists())
-                .andExpect(jsonPath("$.created").exists())
-                .andExpect(jsonPath("$.comment").exists())
-                .andExpect(jsonPath("$.shippingAddress").exists())
-                .andExpect(jsonPath("$.billingAddress").exists())
-                .andExpect(jsonPath("$.cart.id").isNumber())
-                .andExpect(jsonPath("$.cart.freeShipping").exists())
-                .andExpect(jsonPath("$.cart.itemCount").isNumber())
-                .andExpect(jsonPath("$.cart.cartPrice").isNumber())
-                .andExpect(jsonPath("$.cart.lines").isArray());
+            mockMvc.perform(get(ORDER_PATH + "/{id}", 1L))
+                    .andExpect(status().isOk())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.id").isNumber())
+                    .andExpect(jsonPath("$.customer").exists())
+                    .andExpect(jsonPath("$.deliveryOption").exists())
+                    .andExpect(jsonPath("$.billingOption").exists())
+                    .andExpect(jsonPath("$.created").exists())
+                    .andExpect(jsonPath("$.comment").exists())
+                    .andExpect(jsonPath("$.shippingAddress").exists())
+                    .andExpect(jsonPath("$.billingAddress").exists())
+                    .andExpect(jsonPath("$.cart.id").isNumber())
+                    .andExpect(jsonPath("$.cart.freeShipping").exists())
+                    .andExpect(jsonPath("$.cart.itemCount").isNumber())
+                    .andExpect(jsonPath("$.cart.cartPrice").isNumber())
+                    .andExpect(jsonPath("$.cart.lines").isArray());
+
+            verify(orderService, times(1)).getOrderById(anyLong());
+        });
     }
 
     @Test
-    public void testCreateOrder() throws Exception {
-        OrderNewDto orderDto = generateRandomObject(OrderNewDto.class);
-        Long orderId = 1L;
+    public void createOrder() throws Exception {
+        assertTimeout(Duration.ofMillis(100), () -> {
+            OrderNewDto orderDto = generateRandomObject(OrderNewDto.class);
+            Long orderId = 1L;
 
-        when(orderService.createOrder(orderDto)).thenReturn(orderId);
+            when(orderService.createOrder(orderDto)).thenReturn(orderId);
 
-        mockMvc.perform(post(ORDER_PATH + ORDER_CREATE)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(orderDto)))
-                .andExpect(status().isCreated())
-                .andExpect(header().string("Location", containsString("/api/order/" + orderId)))
-                .andExpect(jsonPath("$", is(orderId.intValue())));
+            mockMvc.perform(post(ORDER_PATH + ORDER_CREATE)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(asJsonString(orderDto)))
+                    .andExpect(status().isCreated())
+                    .andExpect(header().string("Location", containsString("/api/order/" + orderId)))
+                    .andExpect(jsonPath("$", is(orderId.intValue())));
+
+            verify(orderService, times(1)).createOrder(orderDto);
+        });
     }
 
     private static String asJsonString(final Object obj) {

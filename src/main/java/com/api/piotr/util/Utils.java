@@ -2,7 +2,10 @@ package com.api.piotr.util;
 
 import static lombok.Lombok.sneakyThrow;
 
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.util.function.ThrowingSupplier;
 
@@ -26,4 +29,11 @@ public class Utils {
             throw new RuntimeException(message, e);
         }
     }
+
+    public static <T, U> List<U> mapToList(List<T> list, Function<T, U> mapper) {
+        return list.stream()
+                .map(mapper)
+                .collect(Collectors.toList());
+    }
+
 }

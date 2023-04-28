@@ -1,4 +1,4 @@
-package com.api.piotr;
+package com.api.piotr.util;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 

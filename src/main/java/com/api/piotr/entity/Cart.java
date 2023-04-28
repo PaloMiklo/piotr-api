@@ -9,7 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,9 +38,6 @@ public class Cart {
 
     @Column(name = "cart_price", nullable = false)
     private BigDecimal cartPrice;
-
-    @OneToOne(mappedBy = "cart", orphanRemoval = true)
-    private OrderTable orderTable;
 
     @OneToMany(mappedBy = "cart", orphanRemoval = true)
     private List<CartLine> lines;

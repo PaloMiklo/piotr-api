@@ -1,4 +1,4 @@
-package com.api.piotr;
+package com.api.piotr.util;
 
 import static com.api.piotr.util.Utils.rethrow;
 import static java.lang.Math.floor;
@@ -11,7 +11,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.RecordComponent;
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -20,17 +19,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
-import java.util.Set;
-import java.util.UUID;
 
 import com.api.piotr.entity.PayedOption;
 import com.api.piotr.entity.PayedOptionItem;
-import com.api.piotr.util.PayedOptionItemWrite;
-import com.api.piotr.util.Utils;
 
 public class ObjectRandomizer {
     private static Random random = new Random();
@@ -127,6 +120,12 @@ public class ObjectRandomizer {
                     case "PayedOptionItem":
                         field.set(object, PayedOptionItemWrite.createInstance("2_DAY_SHIPPING-SHIPPING"));
                         break;
+                    case "Byte":
+                    case "byte[]":
+                        byte[] bytes = new byte[10];
+                        random.nextBytes(bytes);
+                        field.set(object, bytes);
+                        break;
                     default:
                         Object nestedObject = fieldType.getDeclaredConstructor().newInstance();
                         var val = randomizeObjectFields(nestedObject);
@@ -199,6 +198,11 @@ public class ObjectRandomizer {
                 case "Map":
                     value = new HashMap<>();
                     break;
+                case "Byte":
+                case "byte[]":
+                    byte[] bytes = new byte[10];
+                    value = bytes;
+                    break;
                 default:
                     if (type == PayedOption.class) {
                         value = new PayedOption("PAYMENT", "payment");
@@ -235,10 +239,15 @@ public class ObjectRandomizer {
 
     private static String generateRandomString(Integer length) {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
-        return new StringBuilder()
-                .append(random.ints(length, 0, chars.length())
-                        .mapToObj(i -> chars.charAt(i))
-                        .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append))
-                .toString();
+        var builder = new StringBuilder();
+        builder.append(random.ints(length, 0, chars.length())
+                .mapToObj(i -> chars.charAt(i))
+                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append));
+
+        // add a hyphen followed by a random character at the end
+        builder.append("-");
+        builder.append(chars.charAt(random.nextInt(chars.length())));
+
+        return builder.toString();
     }
 }

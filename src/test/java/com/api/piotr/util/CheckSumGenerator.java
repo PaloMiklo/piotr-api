@@ -1,4 +1,4 @@
-package com.api.piotr;
+package com.api.piotr.util;
 
 import java.util.Random;
 import java.util.zip.CRC32;

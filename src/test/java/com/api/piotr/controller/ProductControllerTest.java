@@ -4,6 +4,7 @@ import static com.api.piotr.constant.ApiPaths.PRODUCT_LIST;
 import static com.api.piotr.constant.ApiPaths.PRODUCT_PATH;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -13,6 +14,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,20 +44,22 @@ public class ProductControllerTest {
     private OrderService orderService;
 
     @Test
-    public void testGetAllProducts() throws Exception {
-        List<ProductRowDto> productsList = new ArrayList<>();
-        productsList.add(new ProductRowDto(1L));
-        productsList.add(new ProductRowDto(2L));
-        Page<ProductRowDto> products = new PageImpl<>(productsList);
-        given(productService.getAllProducts(any(Pageable.class))).willReturn(products);
+    public void getAllProducts() throws Exception {
+        assertTimeout(Duration.ofMillis(100), () -> {
+            List<ProductRowDto> productsList = new ArrayList<>();
+            productsList.add(new ProductRowDto(1L));
+            productsList.add(new ProductRowDto(2L));
+            Page<ProductRowDto> products = new PageImpl<>(productsList);
+            given(productService.getAllProducts(any(Pageable.class))).willReturn(products);
 
-        mockMvc.perform(get(PRODUCT_PATH + PRODUCT_LIST))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content", hasSize(2)))
-                .andExpect(jsonPath("$.content[0].id", is(1)))
-                .andExpect(jsonPath("$.content[1].id", is(2)));
+            mockMvc.perform(get(PRODUCT_PATH + PRODUCT_LIST))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.content", hasSize(2)))
+                    .andExpect(jsonPath("$.content[0].id", is(1)))
+                    .andExpect(jsonPath("$.content[1].id", is(2)));
 
-        verify(productService, times(1)).getAllProducts(any(Pageable.class));
-        verifyNoMoreInteractions(productService);
+            verify(productService, times(1)).getAllProducts(any(Pageable.class));
+            verifyNoMoreInteractions(productService);
+        });
     }
 }
