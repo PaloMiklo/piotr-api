@@ -46,9 +46,9 @@ public class ProductController {
     }
 
     @PostMapping(path = PRODUCT_CREATE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Long> create(
-            @RequestPart("image") MultipartFile image,
-            @RequestPart("product") ProductNewDto productDto) {
+    public ResponseEntity<Long> createProduct(
+            @RequestPart("product") ProductNewDto productDto,
+            @RequestPart("image") MultipartFile image) {
         Long productId = productService.createProduct(productDto, image);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
@@ -57,5 +57,4 @@ public class ProductController {
                 .toUri();
         return ResponseEntity.created(location).body(productId);
     }
-
 }
