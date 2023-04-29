@@ -2,6 +2,7 @@ package com.api.piotr.controller;
 
 import static com.api.piotr.constant.ApiPaths.PRODUCT_LIST;
 import static com.api.piotr.constant.ApiPaths.PRODUCT_PATH;
+import static com.api.piotr.util.ObjectRandomizer.generateRandomObject;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
@@ -27,6 +28,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.api.piotr.dto.ProductDetDto;
 import com.api.piotr.dto.ProductRowDto;
 import com.api.piotr.service.OrderService;
 import com.api.piotr.service.ProductService;
@@ -59,6 +61,27 @@ public class ProductControllerTest {
                     .andExpect(jsonPath("$.content[1].id", is(2)));
 
             verify(productService, times(1)).getAllProducts(any(Pageable.class));
+            verifyNoMoreInteractions(productService);
+        });
+    }
+
+    @Test
+    public void getProductById() throws Exception {
+        assertTimeout(Duration.ofMillis(100), () -> {
+            ProductDetDto detail = generateRandomObject(ProductDetDto.class);
+
+            given(productService.getProductById(detail.id())).willReturn(detail);
+
+            mockMvc.perform(get(String.format("%s/%s", PRODUCT_PATH, detail.id())))
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.id").value(is(detail.id())))
+                    .andExpect(jsonPath("$.name").value(is(detail.name())))
+                    .andExpect(jsonPath("$.price").value(is(Long.valueOf(String.valueOf(detail.price())))))
+                    .andExpect(jsonPath("$.description").value(is(detail.description())))
+                    .andExpect(jsonPath("$.quantity").value(is(detail.quantity())))
+                    .andExpect(jsonPath("$.valid").value(is(detail.valid())));
+
+            verify(productService, times(1)).getProductById(detail.id());
             verifyNoMoreInteractions(productService);
         });
     }

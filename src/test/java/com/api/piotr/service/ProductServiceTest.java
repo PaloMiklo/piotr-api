@@ -45,7 +45,7 @@ public class ProductServiceTest {
     @Test
     public void getAllProducts() throws Exception {
         assertTimeout(Duration.ofMillis(100), () -> {
-            List<ProductRowDto> products = new ArrayList<ProductRowDto>();
+            List<ProductRowDto> products = new ArrayList<ProductRowDto>(3);
             products.add(generateRandomObject(ProductRowDto.class));
             products.add(generateRandomObject(ProductRowDto.class));
             products.add(generateRandomObject(ProductRowDto.class));
