@@ -8,6 +8,7 @@ public interface ApiPaths {
     public static final String LIST = "/list";
     public static final String CREATE = "";
     public static final String DETAIL = "/{id}";
+    public static final String IMAGE = DETAIL + "/image";
 
     public static String ORDER_LIST = LIST;
     public static String ORDER_DETAIL = DETAIL;
@@ -15,5 +16,6 @@ public interface ApiPaths {
 
     public static String PRODUCT_LIST = LIST;
     public static String PRODUCT_DETAIL = DETAIL;
+    public static String PRODUCT_IMAGE = IMAGE;
     public static String PRODUCT_CREATE = CREATE;
 }

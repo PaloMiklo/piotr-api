@@ -1,11 +1,14 @@
 package com.api.piotr.controller;
 
+import static com.api.piotr.constant.ApiPaths.IMAGE;
 import static com.api.piotr.constant.ApiPaths.PRODUCT_CREATE;
 import static com.api.piotr.constant.ApiPaths.PRODUCT_LIST;
 import static com.api.piotr.constant.ApiPaths.PRODUCT_PATH;
 import static com.api.piotr.util.ObjectRandomizer.generateRandomObject;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -30,14 +33,22 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import com.api.piotr.dto.ProductDetDto;
 import com.api.piotr.dto.ProductNewDto;
 import com.api.piotr.dto.ProductRowDto;
+import com.api.piotr.service.ImageTableService;
 import com.api.piotr.service.OrderService;
 import com.api.piotr.service.ProductService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -53,6 +64,9 @@ public class ProductControllerTest {
 
     @MockBean
     private OrderService orderService;
+
+    @MockBean
+    private ImageTableService imageService;
 
     @Test
     public void getAllProducts() throws Exception {
@@ -96,6 +110,29 @@ public class ProductControllerTest {
     }
 
     @Test
+    public void getImageByProductId() throws Exception {
+        Long id = 1L;
+        byte[] imageBytes = "IMAGE LIKE TEST STRING".getBytes();
+
+        StreamingResponseBody stream = outputStream -> {
+            outputStream.write(imageBytes);
+        };
+
+        given(imageService.getImageByProductId(id)).willReturn(stream);
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+                .get(PRODUCT_PATH + IMAGE, id))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn();
+
+        MockHttpServletResponse response = result.getResponse();
+
+        assertThat(response.getContentType()).isEqualTo(MediaType.IMAGE_JPEG_VALUE);
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertArrayEquals(response.getContentAsByteArray(), imageBytes);
+    }
+
+    @Test
     public void createProduct() throws Exception {
         assertTimeout(Duration.ofMillis(100), () -> {
             ProductNewDto product = generateRandomObject(ProductNewDto.class);
@@ -128,6 +165,6 @@ public class ProductControllerTest {
             verify(productService, times(1)).createProduct(any(), any());
             verifyNoMoreInteractions(productService);
         });
-    }
 
+    }
 }
