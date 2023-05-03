@@ -31,7 +31,12 @@ CREATE TABLE public.payed_option_item(
   price NUMERIC NOT NULL
 );
 
-CREATE TABLE public.image_table(id SERIAL PRIMARY KEY, image BYTEA);
+CREATE TABLE public.image_table(
+  id SERIAL PRIMARY KEY,
+  image BYTEA,
+  mime_type VARCHAR(50) NOT NULL,
+  fileName VARCHAR(50) NOT NULL
+);
 
 CREATE TABLE public.product (
   id SERIAL PRIMARY KEY,
@@ -199,7 +204,7 @@ VALUES
   );
 
 INSERT INTO
-  image_table (image)
+  image_table (image, mime_type, fileName)
 VALUES
   (
     '/9j/4AAQSkZJRgABAgAAAQABAAD/7QB8UGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAF8cAigAWkZC
@@ -2263,11 +2268,13 @@ AfcY8VL4upCeKOjpk1eVvasX0DmoPixPNM5BwrF1/ao7idVQDy0t91IqxKbHNIo5Be2lFKNIUk+9
 Pvar+7FYxLfFikx32njig3Syfk80Kxa6u1A6WGktdac3/wDaZ0NC2lrQIFbB95iiEDHxNexPNb+h
 LX+DzX06USv8VMNiPNEp8Ug9Lp0qX1mmv1Ubb3aJSh3FiiHy1/a9q/h+6neMGoAZBvrNYTT0/wDa
 gh4bnimflDTL9qIfZrTFnpP3QJLdtGnUVKRy4eNTetP9fprNp7P7phOGI9MEdeluyvZ7Me1c0Uv8
-0p95r+ZTCegioOw4/wDKMrn9VYjY1qwY0MHLeuf7/H//2Q=='
+0p95r+ZTCegioOw4/wDKMrn9VYjY1qwY0MHLeuf7/H//2Q==',
+    'image/jpeg',
+    'product1.jpeg'
   );
 
 INSERT INTO
-  image_table (image)
+  image_table (image, mime_type, fileName)
 VALUES
   (
     '/9j/4AAQSkZJRgABAgAAAQABAAD/7QB8UGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAF8cAigAWkZC
@@ -3223,11 +3230,13 @@ oI1VkKK+BYMqVVoB2Ze2BtohAZahmndyJBlvVexEMUYV0XRZ0ajAcqNMLqoRBCKCFFAKCLMihRWQ
 qc+STu2OAQUEhBiirqqtiWdQQdDmhuZ45DBFEZFGKsclmqPrkg7t/Ie2qL5wZbGQhOJpiVXotnwt
 qAvfm6DoYBCCiqt8LIzug6DI4WIz3RaBvh0EFZCqg/ygwVQWqFCaRunKAReUWCoAkuMBCl1fEz2w
 BB0KYBVXQeMjog4OablGxwqoVFBVVVlLIQUWZCEGZFwVRV7g+QQi9x9QQxByKCCVGxUPY+Buv//Z
-'
+',
+    'image/jpeg',
+    'product2.jpeg'
   );
 
 INSERT INTO
-  image_table (image)
+  image_table (image, mime_type, fileName)
 VALUES
   (
     '/9j/4AAQSkZJRgABAQAAAQABAAD/7QB8UGhvdG9zaG9wIDMuMAA4QklNBAQAAAAAAF8cAigAWkZC
@@ -6849,7 +6858,9 @@ P/kOhJf7nTA6/wDofdEKIgMitRP1x6lZ3pw68umPSiAaBkV1OfMrMrLes78mTry73rqcOldeTZf3
 +btw6cXar0RQoUSz36V+6v3V+2hZr3oUKH7oWnOiHiaAUKFChQoUKIY0KFecj02pExtFK8CeLrxF
 HYN41eASTyDJxo0NDxBFfUwoePEoP3X+uBUv1S/Vfqr9H4gAooB+qv1Uv1S/VKlX+qH7pOIR1KuZ
 CzDiAoaGjCTHMi8VNXen7qNgTjEZ0f1UKPAelR6Bl1xoUKDN6FCjRoUKFCKPxSTfKh+6FCkuUUml
-3Kv3V+yv2UKGlXoiYp5O3Dpzf//Z'
+3Kv3V+yv2UKGlXoiYp5O3Dpzf//Z',
+    'application/jpeg',
+    'product3.jpeg'
   );
 
 INSERT INTO

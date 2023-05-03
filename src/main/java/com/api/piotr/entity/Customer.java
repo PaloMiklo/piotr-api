@@ -26,12 +26,12 @@ public class Customer {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(name = "firstname", nullable = false, length = 255)
+    @Column(name = "firstname", length = 255, nullable = false)
     private String firstName;
 
-    @Column(name = "lastname", nullable = false, length = 255)
+    @Column(name = "lastname", length = 255, nullable = false)
     private String lastName;
 
-    @Column(nullable = false, length = 255)
+    @Column(length = 255, nullable = false)
     private String email;
 }

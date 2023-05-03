@@ -26,13 +26,13 @@ public class PayedOptionItem {
     @Column(length = 50)
     private String code;
 
-    @Column(nullable = false, length = 255)
+    @Column(length = 255, nullable = false)
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "payed_option")
+    @JoinColumn(name = "payed_option", nullable = false)
     private PayedOption payedOption;
 
-    @Column
+    @Column(nullable = false)
     private BigDecimal price;
 }

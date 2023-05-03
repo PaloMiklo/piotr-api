@@ -2,6 +2,7 @@ package com.api.piotr.entity;
 
 import java.time.LocalDateTime;
 
+import io.micrometer.common.lang.Nullable;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,7 +43,7 @@ public class OrderTable {
     @Column(name = "created_fe", nullable = false)
     private LocalDateTime created;
 
-    @Column
+    @Nullable
     private String comment;
 
     @ManyToOne

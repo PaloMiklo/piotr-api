@@ -24,6 +24,12 @@ public class ImageTable {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(columnDefinition = "bytea")
+    @Column(columnDefinition = "bytea", nullable = false)
     private byte[] image;
+
+    @Column(name = "mime_type", nullable = false)
+    private String mimeType;
+
+    @Column(nullable = false)
+    private String fileName;
 }

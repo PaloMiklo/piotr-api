@@ -35,24 +35,24 @@ public class Product implements IdReference {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(nullable = false, length = 255)
+    @Column(length = 255, nullable = false)
     private String name;
 
     @Column(nullable = false)
     private BigDecimal price;
 
-    @Column
     @Nullable
     private String description;
 
-    @Column
+    @Column(nullable = false)
     private Integer quantity;
 
+    @Nullable
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "image", nullable = true)
+    @JoinColumn(name = "image")
     private ImageTable image;
 
-    @Column
+    @Column(nullable = false)
     private Boolean valid = false;
 
     @OneToMany(mappedBy = "product")

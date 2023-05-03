@@ -26,6 +26,6 @@ public class PayedOption implements CodeReference {
     @Column(length = 50)
     private String code;
 
-    @Column(nullable = false, length = 255)
+    @Column(length = 255, nullable = false)
     private String name;
 }

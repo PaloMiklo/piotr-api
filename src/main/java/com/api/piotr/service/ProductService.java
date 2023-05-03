@@ -40,7 +40,10 @@ public class ProductService {
     public Long createProduct(ProductNewDto product, MultipartFile image) {
         Product newProduct = null;
         try {
-            var imageTable = new ImageTable(null, image.getBytes());
+            var imageTable = new ImageTable(null,
+                    image.getBytes(),
+                    image.getContentType(),
+                    image.getOriginalFilename());
             newProduct = getApply(product.toEntity(), e -> e.setImage(imageTable));
         } catch (IOException ex) {
             throw new ProcessingException("image", ex);

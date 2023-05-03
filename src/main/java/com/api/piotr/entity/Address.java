@@ -24,18 +24,18 @@ public class Address {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @Column(length = 255)
+    @Column(length = 255, nullable = false)
     private String street;
 
-    @Column(name = "house_number", length = 255)
+    @Column(name = "house_number", length = 255, nullable = false)
     private String houseNumber;
 
-    @Column(name = "zip_code", length = 10)
+    @Column(name = "zip_code", length = 10, nullable = false)
     private String zipCode;
 
-    @Column(length = 255)
+    @Column(length = 255, nullable = false)
     private String city;
 
-    @Column(length = 255)
+    @Column(length = 255, nullable = false)
     private String country;
 }
