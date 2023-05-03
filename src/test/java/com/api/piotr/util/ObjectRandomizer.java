@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import com.api.piotr.entity.PayedOption;
 import com.api.piotr.entity.PayedOptionItem;
@@ -241,8 +242,8 @@ public class ObjectRandomizer {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
         var builder = new StringBuilder();
         builder.append(random.ints(length, 0, chars.length())
-                .mapToObj(i -> chars.charAt(i))
-                .collect(StringBuilder::new, StringBuilder::append, StringBuilder::append));
+                .mapToObj(i -> String.valueOf(chars.charAt(i)))
+                .collect(Collectors.joining()));
 
         // add a hyphen followed by a random character at the end
         builder.append("-");
