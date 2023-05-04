@@ -238,7 +238,7 @@ public class ObjectRandomizer {
         });
     };
 
-    private static String generateRandomString(Integer length) {
+    public static String generateRandomString(Integer length) {
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
         var builder = new StringBuilder();
         builder.append(random.ints(length, 0, chars.length())

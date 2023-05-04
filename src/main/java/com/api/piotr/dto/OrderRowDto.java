@@ -1,5 +1,9 @@
 package com.api.piotr.dto;
 
-public record OrderRowDto(Long id) {
+import java.time.LocalDateTime;
 
+public record OrderRowDto(
+                Long id,
+                CustomerDetDto customer,
+                LocalDateTime created) {
 }

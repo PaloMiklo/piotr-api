@@ -17,16 +17,9 @@ public class ImageTableService {
     private final ImageRepository imageRepository;
 
     public StreamingResponseBody getImageByProductId(Long id) {
-        ImageTableRowDto image = imageRepository.findImageTableByProductId(id)
+        ImageTableRowDto imageTable = imageRepository.findImageTableByProductId(id)
                 .orElseThrow(() -> new ResourceNotFoundException("ImageTable", String.valueOf(id)));
 
-        StreamingResponseBody responseBody = outputStream -> {
-            if (image != null) {
-                byte[] imageData = image.image();
-                outputStream.write(imageData);
-            }
-        };
-
-        return responseBody;
+        return outputStream -> outputStream.write(imageTable.image());
     }
 }

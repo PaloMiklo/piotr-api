@@ -13,7 +13,20 @@ import com.api.piotr.dto.OrderRowDto;
 import com.api.piotr.entity.OrderTable;
 
 public interface OrderRepository extends _HibernateRepository<OrderTable>, JpaRepository<OrderTable, Long> {
-    @Query("SELECT new com.api.piotr.dto.OrderRowDto(o.id) FROM OrderTable o")
+    @Query("""
+             SELECT new com.api.piotr.dto.OrderRowDto(
+                ordr.id,
+                new com.api.piotr.dto.CustomerDetDto(
+                     cust.id,
+                     cust.firstName,
+                     cust.lastName,
+                     cust.email
+                ),
+                ordr.created
+             )
+             FROM OrderTable ordr
+             JOIN Customer cust ON cust.id = ordr.customer.id
+            """)
     Page<OrderRowDto> findAllOrders(Pageable pageable);
 
     @Query("""

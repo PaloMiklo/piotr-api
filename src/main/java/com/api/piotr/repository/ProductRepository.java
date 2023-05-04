@@ -12,7 +12,15 @@ import com.api.piotr.dto.ProductRowDto;
 import com.api.piotr.entity.Product;
 
 public interface ProductRepository extends _HibernateRepository<Product>, JpaRepository<Product, Long> {
-    @Query("SELECT new com.api.piotr.dto.ProductRowDto(p.id) FROM Product p")
+    @Query("""
+            SELECT new com.api.piotr.dto.ProductRowDto(
+            prod.id,
+            prod.name,
+            prod.price,
+            prod.valid
+            )
+            FROM Product prod
+            """)
     Page<ProductRowDto> findAllProducts(Pageable pageable);
 
     @Query("""

@@ -25,6 +25,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +51,9 @@ import com.api.piotr.dto.ProductRowDto;
 import com.api.piotr.service.ImageTableService;
 import com.api.piotr.service.OrderService;
 import com.api.piotr.service.ProductService;
+import com.api.piotr.util.ObjectRandomizer;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.math.BigDecimal;
 
 @WebMvcTest(ProductController.class)
 public class ProductControllerTest {
@@ -67,12 +70,16 @@ public class ProductControllerTest {
     @MockBean
     private ImageTableService imageService;
 
+    private static Random random = new Random();
+
     @Test
     public void getAllProducts() throws Exception {
         assertTimeout(Duration.ofMillis(100), () -> {
             List<ProductRowDto> productsList = new ArrayList<>();
-            productsList.add(new ProductRowDto(1L));
-            productsList.add(new ProductRowDto(2L));
+            productsList.add(new ProductRowDto(
+                    1L, ObjectRandomizer.generateRandomString(5), BigDecimal.valueOf(random.nextDouble()), true));
+            productsList.add(new ProductRowDto(
+                    2L, ObjectRandomizer.generateRandomString(5), BigDecimal.valueOf(random.nextDouble()), true));
             Page<ProductRowDto> products = new PageImpl<>(productsList);
             given(productService.getAllProducts(any(Pageable.class))).willReturn(products);
 

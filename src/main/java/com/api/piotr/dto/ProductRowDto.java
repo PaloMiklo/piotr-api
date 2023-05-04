@@ -1,4 +1,10 @@
 package com.api.piotr.dto;
 
-public record ProductRowDto(Long id) {
+import java.math.BigDecimal;
+
+public record ProductRowDto(
+        Long id,
+        String name,
+        BigDecimal price,
+        Boolean valid) {
 }

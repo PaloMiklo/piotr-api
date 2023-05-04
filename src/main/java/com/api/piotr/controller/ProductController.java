@@ -1,5 +1,6 @@
 package com.api.piotr.controller;
 
+import static com.api.piotr.constant.ApiPaths.DETAIL;
 import static com.api.piotr.constant.ApiPaths.PRODUCT_CREATE;
 import static com.api.piotr.constant.ApiPaths.PRODUCT_DETAIL;
 import static com.api.piotr.constant.ApiPaths.PRODUCT_LIST;
@@ -68,7 +69,7 @@ public class ProductController {
         Long productId = productService.createProduct(productDto, image);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
-                .path("/{id}")
+                .path(DETAIL)
                 .buildAndExpand(productId)
                 .toUri();
         return ResponseEntity.created(location).body(productId);

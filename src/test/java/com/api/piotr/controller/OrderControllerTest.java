@@ -58,16 +58,18 @@ public class OrderControllerTest {
     public void getAllOrders() throws Exception {
         assertTimeout(Duration.ofMillis(100), () -> {
             List<OrderRowDto> ordersList = new ArrayList<>();
-            ordersList.add(new OrderRowDto(1L));
-            ordersList.add(new OrderRowDto(2L));
+            ordersList.add(generateRandomObject(OrderRowDto.class));
+            ordersList.add(generateRandomObject(OrderRowDto.class));
+            Long id1 = ordersList.get(0).id();
+            Long id2 = ordersList.get(1).id();
 
             given(orderService.getAllOrders(any(Pageable.class))).willReturn(new PageImpl<>(ordersList));
 
             mockMvc.perform(get(ORDER_PATH + ORDER_LIST))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.content", hasSize(2)))
-                    .andExpect(jsonPath("$.content[0].id", is(1)))
-                    .andExpect(jsonPath("$.content[1].id", is(2)));
+                    .andExpect(jsonPath("$.content[0].id", is(id1)))
+                    .andExpect(jsonPath("$.content[1].id", is(id2)));
 
             verify(orderService, times(1)).getAllOrders(any(Pageable.class));
             verifyNoMoreInteractions(orderService);
