@@ -1,5 +1,7 @@
 package com.api.piotr.util;
 
+import static com.api.piotr.constant.PayedOptions.PAYMENT;
+import static com.api.piotr.constant.PayedOptions.TWO_DAY_SHIPPING_SHIPPING;
 import static com.api.piotr.util.Utils.rethrow;
 import static java.lang.Math.floor;
 import static java.lang.Math.random;
@@ -116,10 +118,10 @@ public class ObjectRandomizer {
                         field.set(object, new HashMap<>());
                         break;
                     case "PayedOption":
-                        field.set(object, new PayedOption("PAYMENT", "payment"));
+                        field.set(object, new PayedOption(PAYMENT, PAYMENT.toLowerCase()));
                         break;
                     case "PayedOptionItem":
-                        field.set(object, PayedOptionItemWrite.createInstance("2_DAY_SHIPPING-SHIPPING"));
+                        field.set(object, PayedOptionItemWrite.createInstance(TWO_DAY_SHIPPING_SHIPPING));
                         break;
                     case "Byte":
                     case "byte[]":
@@ -206,9 +208,9 @@ public class ObjectRandomizer {
                     break;
                 default:
                     if (type == PayedOption.class) {
-                        value = new PayedOption("PAYMENT", "payment");
+                        value = new PayedOption(PAYMENT, PAYMENT.toLowerCase());
                     } else if (type == PayedOptionItem.class) {
-                        value = PayedOptionItemWrite.createInstance("2_DAY_SHIPPING-SHIPPING");
+                        value = PayedOptionItemWrite.createInstance(TWO_DAY_SHIPPING_SHIPPING);
                     } else if (type.isEnum()) {
                         var constants = type.getEnumConstants();
                         value = floor(random() * constants.length);
