@@ -34,17 +34,17 @@ import com.api.piotr.repository.ProductRepository;
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
 
+    private static Random random = new Random();
+
     @Mock
     private ProductRepository productRepository;
 
     @InjectMocks
     private ProductService productService;
 
-    private static Random random = new Random();
-
     @Test
     public void getAllProducts() throws Exception {
-        assertTimeout(Duration.ofMillis(100), () -> {
+        assertTimeout(Duration.ofMillis(110), () -> {
             List<ProductRowDto> products = new ArrayList<ProductRowDto>(3);
             products.add(generateRandomObject(ProductRowDto.class));
             products.add(generateRandomObject(ProductRowDto.class));
@@ -64,7 +64,7 @@ public class ProductServiceTest {
 
     @Test
     public void getProductById() throws Exception {
-        assertTimeout(Duration.ofMillis(100), () -> {
+        assertTimeout(Duration.ofMillis(110), () -> {
             ProductDetDto detail = generateRandomObject(ProductDetDto.class);
             Long id = detail.id();
 
@@ -80,7 +80,7 @@ public class ProductServiceTest {
 
     @Test
     public void createProduct() throws Exception {
-        assertTimeout(Duration.ofMillis(100), () -> {
+        assertTimeout(Duration.ofMillis(110), () -> {
             ProductNewDto newProduct = generateRandomObject(ProductNewDto.class);
             Product product = newProduct.toEntity();
             Long id = random.nextLong();

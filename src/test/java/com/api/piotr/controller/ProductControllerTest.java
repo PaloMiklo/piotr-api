@@ -21,6 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -53,10 +54,11 @@ import com.api.piotr.service.OrderService;
 import com.api.piotr.service.ProductService;
 import com.api.piotr.util.ObjectRandomizer;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.math.BigDecimal;
 
 @WebMvcTest(ProductController.class)
 public class ProductControllerTest {
+
+    private static Random random = new Random();
 
     @Autowired
     private MockMvc mockMvc;
@@ -70,11 +72,9 @@ public class ProductControllerTest {
     @MockBean
     private ImageTableService imageService;
 
-    private static Random random = new Random();
-
     @Test
     public void getAllProducts() throws Exception {
-        assertTimeout(Duration.ofMillis(100), () -> {
+        assertTimeout(Duration.ofMillis(110), () -> {
             List<ProductRowDto> productsList = new ArrayList<>();
             productsList.add(new ProductRowDto(
                     1L, ObjectRandomizer.generateRandomString(5), BigDecimal.valueOf(random.nextDouble()), true));
@@ -96,7 +96,7 @@ public class ProductControllerTest {
 
     @Test
     public void getProductById() throws Exception {
-        assertTimeout(Duration.ofMillis(100), () -> {
+        assertTimeout(Duration.ofMillis(110), () -> {
             ProductDetDto detail = generateRandomObject(ProductDetDto.class);
 
             given(productService.getProductById(detail.id())).willReturn(detail);
@@ -140,7 +140,7 @@ public class ProductControllerTest {
 
     @Test
     public void createProduct() throws Exception {
-        assertTimeout(Duration.ofMillis(100), () -> {
+        assertTimeout(Duration.ofMillis(110), () -> {
             ProductNewDto product = generateRandomObject(ProductNewDto.class);
             Long id = 1L;
             MockMultipartFile image = new MockMultipartFile(

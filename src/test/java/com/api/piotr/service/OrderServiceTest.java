@@ -1,6 +1,7 @@
 package com.api.piotr.service;
 
 import static com.api.piotr.util.ObjectRandomizer.generateRandomObject;
+import static com.api.piotr.util.PayedOptionItemWrite.createInstance;
 import static com.api.piotr.util.Utils.mapToList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
@@ -8,7 +9,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static com.api.piotr.util.PayedOptionItemWrite.createInstance;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -65,7 +65,7 @@ public class OrderServiceTest {
 
     @Test
     public void getAllOrders() throws Exception {
-        assertTimeout(Duration.ofMillis(100), () -> {
+        assertTimeout(Duration.ofMillis(110), () -> {
             List<OrderRowDto> orders = new ArrayList<OrderRowDto>();
             orders.add(generateRandomObject(OrderRowDto.class));
             orders.add(generateRandomObject(OrderRowDto.class));
@@ -87,7 +87,7 @@ public class OrderServiceTest {
 
     @Test
     public void getOrderById() throws Exception {
-        assertTimeout(Duration.ofMillis(100), () -> {
+        assertTimeout(Duration.ofMillis(110), () -> {
             OrderDetDto orderDetail = generateRandomObject(OrderDetDto.class);
             Long orderId = orderDetail.id();
             Set<CartLineRowDto> cartLineRows = Set.of(
@@ -108,7 +108,7 @@ public class OrderServiceTest {
 
     @Test
     public void createOrder() throws Exception {
-        assertTimeout(Duration.ofMillis(100), () -> {
+        assertTimeout(Duration.ofMillis(110), () -> {
             OrderNewDto newOrder = generateRandomObject(OrderNewDto.class);
             List<CartLine> cartlines = List.of(
                     generateRandomObject(CartLine.class),

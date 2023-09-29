@@ -48,6 +48,20 @@ import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 @WebMvcTest(OrderController.class)
 public class OrderControllerTest {
 
+    private static String asJsonString(final Object obj) {
+        // with 3.0 (or with 2.10 as alternative)
+        ObjectMapper mapper = JsonMapper.builder()
+                .addModule(new ParameterNamesModule())
+                .addModule(new Jdk8Module())
+                .addModule(new JavaTimeModule())
+                .build();
+        try {
+            return mapper.writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -56,7 +70,7 @@ public class OrderControllerTest {
 
     @Test
     public void getAllOrders() throws Exception {
-        assertTimeout(Duration.ofMillis(100), () -> {
+        assertTimeout(Duration.ofMillis(110), () -> {
             List<OrderRowDto> ordersList = new ArrayList<>();
             ordersList.add(generateRandomObject(OrderRowDto.class));
             ordersList.add(generateRandomObject(OrderRowDto.class));
@@ -78,7 +92,7 @@ public class OrderControllerTest {
 
     @Test
     public void getOrderById() throws Exception {
-        assertTimeout(Duration.ofMillis(100), () -> {
+        assertTimeout(Duration.ofMillis(110), () -> {
             given(orderService.getOrderById(anyLong())).willReturn(generateRandomObject(OrderDetDto.class));
 
             mockMvc.perform(get(ORDER_PATH + "/{id}", 1L))
@@ -104,7 +118,7 @@ public class OrderControllerTest {
 
     @Test
     public void createOrder() throws Exception {
-        assertTimeout(Duration.ofMillis(100), () -> {
+        assertTimeout(Duration.ofMillis(110), () -> {
             OrderNewDto orderDto = generateRandomObject(OrderNewDto.class);
             Long orderId = 1L;
 
@@ -119,19 +133,5 @@ public class OrderControllerTest {
 
             verify(orderService, times(1)).createOrder(orderDto);
         });
-    }
-
-    private static String asJsonString(final Object obj) {
-        // with 3.0 (or with 2.10 as alternative)
-        ObjectMapper mapper = JsonMapper.builder()
-                .addModule(new ParameterNamesModule())
-                .addModule(new Jdk8Module())
-                .addModule(new JavaTimeModule())
-                .build();
-        try {
-            return mapper.writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }

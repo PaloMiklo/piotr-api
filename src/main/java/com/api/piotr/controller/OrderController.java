@@ -7,7 +7,6 @@ import static com.api.piotr.constant.ApiPaths.ORDER_PATH;
 
 import java.net.URI;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
@@ -29,8 +28,11 @@ import com.api.piotr.service.OrderService;
 @RequestMapping(ORDER_PATH)
 public class OrderController {
 
-    @Autowired
     private OrderService orderService;
+
+    public OrderController(OrderService orderService) {
+        this.orderService = orderService;
+    }
 
     @GetMapping(ORDER_LIST)
     public ResponseEntity<Page<OrderRowDto>> getAllOrders(Pageable pageable) {

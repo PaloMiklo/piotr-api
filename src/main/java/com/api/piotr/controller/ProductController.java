@@ -3,13 +3,12 @@ package com.api.piotr.controller;
 import static com.api.piotr.constant.ApiPaths.DETAIL;
 import static com.api.piotr.constant.ApiPaths.PRODUCT_CREATE;
 import static com.api.piotr.constant.ApiPaths.PRODUCT_DETAIL;
+import static com.api.piotr.constant.ApiPaths.PRODUCT_IMAGE;
 import static com.api.piotr.constant.ApiPaths.PRODUCT_LIST;
 import static com.api.piotr.constant.ApiPaths.PRODUCT_PATH;
-import static com.api.piotr.constant.ApiPaths.PRODUCT_IMAGE;
 
 import java.net.URI;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -36,11 +35,13 @@ import com.api.piotr.service.ProductService;
 @RequestMapping(PRODUCT_PATH)
 public class ProductController {
 
-    @Autowired
     private ProductService productService;
+    private ImageTableService imageService;
 
-    @Autowired
-    private ImageTableService imageService;;
+    public ProductController(ProductService productService, ImageTableService imageService) {
+        this.productService = productService;
+        this.imageService = imageService;
+    }
 
     @GetMapping(PRODUCT_LIST)
     public ResponseEntity<Page<ProductRowDto>> getAllProducts(Pageable pageable) {

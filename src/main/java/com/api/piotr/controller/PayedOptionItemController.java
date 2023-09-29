@@ -5,7 +5,6 @@ import static com.api.piotr.constant.ApiPaths.PAYED_OPTION_ITEM_PATH;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,8 +18,11 @@ import com.api.piotr.service.PayedOptionItemService;
 @RequestMapping(PAYED_OPTION_ITEM_PATH)
 public class PayedOptionItemController {
 
-    @Autowired
     private PayedOptionItemService payedOptionItemService;
+
+    public PayedOptionItemController(PayedOptionItemService payedOptionItemService) {
+        this.payedOptionItemService = payedOptionItemService;
+    }
 
     @GetMapping(BASE)
     public ResponseEntity<List<PayedOptionItemDto>> getAllItemsByPayedOptionCodes(
