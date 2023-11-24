@@ -1,4 +1,4 @@
--- checksum 3002030999
+-- checksum 3002030991
 --DROP TABLES IF EXISTS
 DROP TABLE IF EXISTS public.cart_line CASCADE;
 
