@@ -1,8 +1,8 @@
 package com.api.piotr.service;
 
 import static com.api.piotr.util.PayedOptionItemWrite.createInstance;
+import static java.util.stream.Collectors.toList;
 
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.springframework.data.domain.Page;
@@ -81,14 +81,14 @@ public class OrderService {
                 var savedLines = cartLineRepository.persistAll(order.cart().lines()
                                 .stream().map(cartLineNewDto -> {
                                         return cartLineNewDto.toEntity(cartLineNewDto.productId(), savedCart);
-                                }).collect(Collectors.toList()));
+                                }).collect(toList()));
 
                 savedCart.setLines(savedLines);
 
                 var savedAddresses = addressRepository.persistAll(
                                 Stream.of(order.shippingAddress(), order.billingAddress())
                                                 .map(AddressNewDto::toEntity)
-                                                .collect(Collectors.toList()));
+                                                .collect(toList()));
 
                 var finalOrder = new OrderTable();
                 finalOrder.setCustomer(savedCustomer);

@@ -6,6 +6,7 @@ import static com.api.piotr.util.Utils.rethrow;
 import static java.lang.Math.floor;
 import static java.lang.Math.random;
 import static java.util.UUID.randomUUID;
+import static java.util.stream.Collectors.joining;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -23,7 +24,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 import com.api.piotr.entity.PayedOption;
 import com.api.piotr.entity.PayedOptionItem;
@@ -47,6 +47,20 @@ public class ObjectRandomizer {
         } else {
             return randomizeObjectFields(clazz.getDeclaredConstructor().newInstance());
         }
+    }
+
+    public static String generateRandomString(Integer length) {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+        var builder = new StringBuilder();
+        builder.append(random.ints(length, 0, chars.length())
+                .mapToObj(i -> String.valueOf(chars.charAt(i)))
+                .collect(joining()));
+
+        // add a hyphen followed by a random character at the end
+        builder.append("-");
+        builder.append(chars.charAt(random.nextInt(chars.length())));
+
+        return builder.toString();
     }
 
     @SuppressWarnings("unchecked")
@@ -137,7 +151,7 @@ public class ObjectRandomizer {
             }
             return (T) object;
         });
-    }
+    };
 
     private static Object randomizeRecordFields(RecordComponent component) {
         return Utils.rethrow("Failed to randomize record field!", () -> {
@@ -238,19 +252,5 @@ public class ObjectRandomizer {
             }
             return value;
         });
-    };
-
-    public static String generateRandomString(Integer length) {
-        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
-        var builder = new StringBuilder();
-        builder.append(random.ints(length, 0, chars.length())
-                .mapToObj(i -> String.valueOf(chars.charAt(i)))
-                .collect(Collectors.joining()));
-
-        // add a hyphen followed by a random character at the end
-        builder.append("-");
-        builder.append(chars.charAt(random.nextInt(chars.length())));
-
-        return builder.toString();
     }
 }

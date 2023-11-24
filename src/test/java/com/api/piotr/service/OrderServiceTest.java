@@ -3,6 +3,7 @@ package com.api.piotr.service;
 import static com.api.piotr.util.ObjectRandomizer.generateRandomObject;
 import static com.api.piotr.util.PayedOptionItemWrite.createInstance;
 import static com.api.piotr.util.Utils.mapToList;
+import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 import static org.mockito.ArgumentMatchers.any;
@@ -15,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
@@ -129,11 +129,11 @@ public class OrderServiceTest {
             List<CartLine> savedLines = newOrder.cart().lines()
                     .stream().map(cartLineNewDto -> {
                         return cartLineNewDto.toEntity(cartLineNewDto.productId(), savedCart);
-                    }).collect(Collectors.toList());
+                    }).collect(toList());
 
             List<Address> savedAddresses = Stream.of(newOrder.shippingAddress(), newOrder.billingAddress())
                     .map(AddressNewDto::toEntity)
-                    .collect(Collectors.toList());
+                    .collect(toList());
 
             OrderTable finalOrder = new OrderTable();
             finalOrder.setCustomer(savedCustomer);

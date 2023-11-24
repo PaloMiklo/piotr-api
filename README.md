@@ -49,3 +49,6 @@ Here are some useful commands you can use with Docker Compose:
 
 If you want to remove the volumes that were created by the container, run the following command:
 `docker volume prune`
+
+# VS Code extensions for Java
+`Extension Pack for Java v0.25.15`
