@@ -1,4 +1,4 @@
--- checksum 3002030998
+-- checksum 3002030999
 --DROP TABLES IF EXISTS
 DROP TABLE IF EXISTS public.cart_line CASCADE;
 
@@ -230,9 +230,9 @@ INSERT INTO
   public.product (name, price, description, quantity, image, valid)
 VALUES
   (
-    'T-Shirt',
-    19.99,
-    'Comfortable cotton t-shirt in black',
+    'Product 1',
+    59.99,
+    'ما فائدته ؟ هناك حقيقة مثبتة منذ زمن طويل وهي أن المحتوى المقروء لصفحة ما سيلهي القارئ عن التركيز على الشكل الخارجي للنص أو شكل توضع الفقرات في الصفحة التي يقرأها. ولذلك يتم استخدام طريقة لوريم إيبسوم لأنها تعطي توزيعاَ طبيعياَ -إلى حد ما- للأحرف عوضاً عن استخدام \"هنا يوجد محتوى نصي، هنا يوجد محتوى نصي\" فتجعلها تبدو (أي الأحرف) وكأنها نص مقروء. العديد من برامح النشر المكتبي وبرامح تحرير صفحات الويب تستخدم لوريم إيبسوم بشكل إفتراضي كنموذج عن النص، وإذا قمت بإدخال \"lorem ipsum\" في أي محرك بحث ستظهر العديد من المواقع الحديثة العهد في نتائج البحث. على مدى السنين ظهرت نسخ جديدة ومختلفة من نص لوريم إيبسوم، أحياناً عن طريق الصدفة، وأحياناً عن عمد كإدخال بعض العبارات الفكاهية إليها."',
     50,
     1,
     TRUE
@@ -249,9 +249,9 @@ INSERT INTO
   )
 VALUES
   (
-    'Sweatshirt',
-    39.99,
-    'Warm fleece sweatshirt in gray',
+    'Product 2',
+    69.99,
+    'Lorem Ipsum e елементарен примерен текст, използван в печатарската и типографската индустрия. Lorem Ipsum e индустриален стандарт от около 1500 година, когато неизвестен печатар взема няколко печатарски букви и ги разбърква, за да напечата с тях книга с примерни шрифтове. Този начин не само е оцелял повече от 5 века, но е навлязъл и в публикуването на електронни издания като е запазен почти без промяна. Популяризиран е през 60те години на 20ти век със издаването на Letraset листи, съдържащи Lorem Ipsum пасажи, популярен е и в наши дни във софтуер за печатни издания като Aldus PageMaker, който включва различни версии на Lorem Ipsum."',
     30,
     2,
     TRUE
@@ -261,9 +261,9 @@ INSERT INTO
   public.product (name, price, description, quantity, image, valid)
 VALUES
   (
-    'Sneakers',
+    'Product 3',
     89.99,
-    'Sporty sneakers with good grip',
+    'A Lorem Ipsum egy egyszerû szövegrészlete, szövegutánzata a betûszedõ és nyomdaiparnak. A Lorem Ipsum az 1500-as évek óta standard szövegrészletként szolgált az iparban; mikor egy ismeretlen nyomdász összeállította a betûkészletét és egy példa-könyvet vagy szöveget nyomott papírra, ezt használta. Nem csak 5 évszázadot élt túl, de az elektronikus betûkészleteknél is változatlanul megmaradt.  Az 1960-as években népszerûsítették a Lorem Ipsum részleteket magukbafoglaló Letraset lapokkal, és legutóbb softwarekkel mint például az Aldus Pagemaker.',
     20,
     3,
     TRUE
