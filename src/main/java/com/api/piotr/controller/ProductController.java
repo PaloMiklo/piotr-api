@@ -8,9 +8,11 @@ import static com.api.piotr.constant.ApiPaths.PRODUCT_LIST;
 import static com.api.piotr.constant.ApiPaths.PRODUCT_PATH;
 
 import java.net.URI;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -60,6 +62,7 @@ public class ProductController {
         StreamingResponseBody responseBody = imageService.getImageByProductId(id);
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.IMAGE_JPEG);
+        headers.setCacheControl(CacheControl.maxAge(1, TimeUnit.DAYS).cachePublic().getHeaderValue());
         return new ResponseEntity<>(responseBody, headers, HttpStatus.OK);
     }
 
