@@ -3,8 +3,8 @@ package com.api.piotr.controller;
 import static com.api.piotr.constant.ApiPaths.BASE;
 import static com.api.piotr.constant.ApiPaths.PAYED_OPTION_ITEM_PATH;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +25,10 @@ public class PayedOptionItemController {
     }
 
     @GetMapping(BASE)
-    public ResponseEntity<List<PayedOptionItemDto>> getAllItemsByPayedOptionCodes(
+    public ResponseEntity<Page<PayedOptionItemDto>> getAllItemsByPayedOptionCodes(
+            Pageable pageable,
             @RequestParam(name = "codes", required = false) String codes) {
-        List<PayedOptionItemDto> items = payedOptionItemService.getAllItemsByPayedOptionCodes(codes);
+        Page<PayedOptionItemDto> items = payedOptionItemService.getAllItemsByPayedOptionCodes(pageable, codes);
         return ResponseEntity.ok(items);
     }
 }

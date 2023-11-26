@@ -1,7 +1,7 @@
 package com.api.piotr.service;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.api.piotr.dto.PayedOptionItemDto;
@@ -19,8 +19,8 @@ public class PayedOptionItemService {
 
     private final PayedOptionItemRepository payedOptionItemRepository;
 
-    public List<PayedOptionItemDto> getAllItemsByPayedOptionCodes(@Nullable String codes) {
-        return payedOptionItemRepository.getAllItemsByPayedOptionCodes(codes)
+    public Page<PayedOptionItemDto> getAllItemsByPayedOptionCodes(Pageable pageable, @Nullable String codes) {
+        return payedOptionItemRepository.getAllItemsByPayedOptionCodes(pageable, codes)
                 .orElseThrow(() -> new ResourceNotFoundException("PayedOption", String.valueOf(codes)));
     }
 }

@@ -1,8 +1,9 @@
 package com.api.piotr.repository;
 
-import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,5 +22,5 @@ public interface PayedOptionItemRepository extends JpaRepository<PayedOptionItem
              JOIN PayedOption po ON item.payedOption = po.code
              WHERE :codes IS NULL OR po.code IN (:codes)
             """)
-    Optional<List<PayedOptionItemDto>> getAllItemsByPayedOptionCodes(@Param("codes") String codes);
+    Optional<Page<PayedOptionItemDto>> getAllItemsByPayedOptionCodes(Pageable pageable, @Param("codes") String codes);
 }
