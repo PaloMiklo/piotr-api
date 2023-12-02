@@ -18,6 +18,8 @@ import com.api.piotr.service.PayedOptionItemService;
 @RequestMapping(PAYED_OPTION_ITEM_PATH)
 public class PayedOptionItemController {
 
+    private final String CODES = "codes";
+
     private PayedOptionItemService payedOptionItemService;
 
     public PayedOptionItemController(PayedOptionItemService payedOptionItemService) {
@@ -27,7 +29,7 @@ public class PayedOptionItemController {
     @GetMapping(BASE)
     public ResponseEntity<Page<PayedOptionItemDto>> getAllItemsByPayedOptionCodes(
             Pageable pageable,
-            @RequestParam(name = "codes", required = false) String codes) {
+            @RequestParam(name = CODES, required = false) String codes) {
         Page<PayedOptionItemDto> items = payedOptionItemService.getAllItemsByPayedOptionCodes(pageable, codes);
         return ResponseEntity.ok(items);
     }

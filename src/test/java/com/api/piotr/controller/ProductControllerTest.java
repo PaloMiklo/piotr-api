@@ -77,9 +77,19 @@ public class ProductControllerTest {
         assertTimeout(Duration.ofMillis(110), () -> {
             List<ProductRowDto> productsList = new ArrayList<>();
             productsList.add(new ProductRowDto(
-                    1L, ObjectRandomizer.generateRandomString(5), BigDecimal.valueOf(random.nextDouble()), true));
+                    1L,
+                    ObjectRandomizer.generateRandomString(5),
+                    BigDecimal.valueOf(random.nextDouble()),
+                    ObjectRandomizer.generateRandomString(25),
+                    ObjectRandomizer.generateRandomObject(Integer.class),
+                    true));
             productsList.add(new ProductRowDto(
-                    2L, ObjectRandomizer.generateRandomString(5), BigDecimal.valueOf(random.nextDouble()), true));
+                    2L,
+                    ObjectRandomizer.generateRandomString(5),
+                    BigDecimal.valueOf(random.nextDouble()),
+                    ObjectRandomizer.generateRandomString(25),
+                    ObjectRandomizer.generateRandomObject(Integer.class),
+                    true));
             Page<ProductRowDto> products = new PageImpl<>(productsList);
             given(productService.getAllProducts(any(Pageable.class))).willReturn(products);
 

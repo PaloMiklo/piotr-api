@@ -37,6 +37,9 @@ import com.api.piotr.service.ProductService;
 @RequestMapping(PRODUCT_PATH)
 public class ProductController {
 
+    private final String PRODUCT = "product";
+    private final String IMAGE = "image";
+
     private ProductService productService;
     private ImageTableService imageService;
 
@@ -68,8 +71,8 @@ public class ProductController {
 
     @PostMapping(path = PRODUCT_CREATE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> createProduct(
-            @RequestPart("product") ProductNewDto productDto,
-            @RequestPart("image") MultipartFile image) {
+            @RequestPart(PRODUCT) ProductNewDto productDto,
+            @RequestPart(IMAGE) MultipartFile image) {
         Long productId = productService.createProduct(productDto, image);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
