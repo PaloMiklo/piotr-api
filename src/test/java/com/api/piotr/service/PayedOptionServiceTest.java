@@ -47,15 +47,20 @@ public class PayedOptionServiceTest {
         public void getAllItemsByPayedOptionCodes() throws Exception {
                 assertTimeout(Duration.ofMillis(110), () -> {
                         Page<PayedOptionItemDto> items = new PageImpl<PayedOptionItemDto>(List.of(
-                                        new PayedOptionItemDto(CART_PAYMENT, CART_PAYMENT,
+                                        new PayedOptionItemDto(CART_PAYMENT,
+                                                        CART_PAYMENT,
                                                         BigDecimal.valueOf(random.nextDouble())),
-                                        new PayedOptionItemDto(CASH_ON_DELIVERY_PAYMENT, CASH_ON_DELIVERY_PAYMENT,
+                                        new PayedOptionItemDto(CASH_ON_DELIVERY_PAYMENT,
+                                                        CASH_ON_DELIVERY_PAYMENT,
                                                         BigDecimal.valueOf(random.nextDouble())),
-                                        new PayedOptionItemDto(TWO_DAY_SHIPPING_SHIPPING, TWO_DAY_SHIPPING_SHIPPING,
+                                        new PayedOptionItemDto(TWO_DAY_SHIPPING_SHIPPING,
+                                                        TWO_DAY_SHIPPING_SHIPPING,
                                                         BigDecimal.valueOf(random.nextDouble())),
-                                        new PayedOptionItemDto(GROUND_SHIPPING, GROUND_SHIPPING,
+                                        new PayedOptionItemDto(GROUND_SHIPPING,
+                                                        GROUND_SHIPPING,
                                                         BigDecimal.valueOf(random.nextDouble())),
-                                        new PayedOptionItemDto(OVERNIGHT_SHIPPING_SHIPPING, OVERNIGHT_SHIPPING_SHIPPING,
+                                        new PayedOptionItemDto(OVERNIGHT_SHIPPING_SHIPPING,
+                                                        OVERNIGHT_SHIPPING_SHIPPING,
                                                         BigDecimal.valueOf(random.nextDouble()))));
 
                         String codes = String.format("%s,%s", SHIPPING, PAYMENT);
@@ -65,9 +70,9 @@ public class PayedOptionServiceTest {
                                         .thenReturn(Optional.of(items));
 
                         Page<PayedOptionItemDto> result = payedOptionItemService
-                                        .getAllItemsByPayedOptionCodes(any(Pageable.class), codes);
+                                        .getAllItemsByPayedOptionCodes(Pageable.ofSize(1), codes);
 
-                        verify(payedOptionItemRepository, times(1)).getAllItemsByPayedOptionCodes(any(Pageable.class),
+                        verify(payedOptionItemRepository, times(1)).getAllItemsByPayedOptionCodes(Pageable.ofSize(1),
                                         codes);
 
                         assertEquals(result, items);

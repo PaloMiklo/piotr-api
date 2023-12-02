@@ -81,14 +81,14 @@ public class ProductControllerTest {
                     ObjectRandomizer.generateRandomString(5),
                     BigDecimal.valueOf(random.nextDouble()),
                     ObjectRandomizer.generateRandomString(25),
-                    ObjectRandomizer.generateRandomObject(Integer.class),
+                    10,
                     true));
             productsList.add(new ProductRowDto(
                     2L,
                     ObjectRandomizer.generateRandomString(5),
                     BigDecimal.valueOf(random.nextDouble()),
                     ObjectRandomizer.generateRandomString(25),
-                    ObjectRandomizer.generateRandomObject(Integer.class),
+                    12,
                     true));
             Page<ProductRowDto> products = new PageImpl<>(productsList);
             given(productService.getAllProducts(any(Pageable.class))).willReturn(products);
