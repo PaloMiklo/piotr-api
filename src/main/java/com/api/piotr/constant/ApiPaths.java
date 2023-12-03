@@ -5,7 +5,7 @@ public interface ApiPaths {
     public static final String ORDER_PATH = BASE_PATH + "/order";
     public static final String CART = BASE_PATH + "/cart";
     public static final String PRODUCT_PATH = BASE_PATH + "/product";
-    public static final String PAYED_OPTION_ITEM_PATH = BASE_PATH + "/payed-option-item";
+    public static final String PAID_OPTION_ITEM_PATH = BASE_PATH + "/paid-option-item";
 
     public static final String LIST = "/list";
     public static final String BASE = "";

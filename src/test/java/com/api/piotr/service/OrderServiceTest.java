@@ -1,7 +1,7 @@
 package com.api.piotr.service;
 
 import static com.api.piotr.util.ObjectRandomizer.generateRandomObject;
-import static com.api.piotr.util.PayedOptionItemWrite.createInstance;
+import static com.api.piotr.util.PaidOptionItemWrite.createInstance;
 import static com.api.piotr.util.Utils.mapToList;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;

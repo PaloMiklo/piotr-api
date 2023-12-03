@@ -8,19 +8,19 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.api.piotr.dto.PayedOptionItemDto;
-import com.api.piotr.entity.PayedOptionItem;
+import com.api.piotr.dto.PaidOptionItemDto;
+import com.api.piotr.entity.PaidOptionItem;
 
-public interface PayedOptionItemRepository extends JpaRepository<PayedOptionItem, Long> {
+public interface PaidOptionItemRepository extends JpaRepository<PaidOptionItem, Long> {
     @Query("""
-             SELECT new com.api.piotr.dto.PayedOptionItemDto(
+             SELECT new com.api.piotr.dto.PaidOptionItemDto(
                 item.code,
                 item.name,
                 item.price
              )
-             FROM PayedOptionItem item
-             JOIN PayedOption po ON item.payedOption = po.code
+             FROM PaidOptionItem item
+             JOIN PaidOption po ON item.paidOption = po.code
              WHERE :codes IS NULL OR po.code IN (:codes)
             """)
-    Optional<Page<PayedOptionItemDto>> getAllItemsByPayedOptionCodes(Pageable pageable, @Param("codes") String codes);
+    Optional<Page<PaidOptionItemDto>> getAllItemsByPaidOptionCodes(Pageable pageable, @Param("codes") String codes);
 }

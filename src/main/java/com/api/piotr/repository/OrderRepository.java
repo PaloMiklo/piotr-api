@@ -38,13 +38,13 @@ public interface OrderRepository extends _HibernateRepository<OrderTable>, JpaRe
                     cust.lastName,
                     cust.email
                 ),
-                new com.api.piotr.dto.PayedOptionItemDetDto(
+                new com.api.piotr.dto.PaidOptionItemDetDto(
                     delOptItem.code,
                     delOptItem.name,
                     delOpt.code,
                     delOptItem.price
                 ),
-                new com.api.piotr.dto.PayedOptionItemDetDto(
+                new com.api.piotr.dto.PaidOptionItemDetDto(
                     billOptItem.code,
                     billOptItem.name,
                     billOpt.code,
@@ -76,10 +76,10 @@ public interface OrderRepository extends _HibernateRepository<OrderTable>, JpaRe
                 )
             )
             FROM OrderTable ordr
-            JOIN PayedOptionItem delOptItem ON delOptItem.code = ordr.deliveryOption.code
-            JOIN PayedOptionItem billOptItem ON billOptItem.code = ordr.billingOption.code
-            JOIN PayedOption delOpt ON delOpt.code = delOptItem.payedOption
-            JOIN PayedOption billOpt ON billOpt.code = billOptItem.payedOption
+            JOIN PaidOptionItem delOptItem ON delOptItem.code = ordr.deliveryOption.code
+            JOIN PaidOptionItem billOptItem ON billOptItem.code = ordr.billingOption.code
+            JOIN PaidOption delOpt ON delOpt.code = delOptItem.paidOption
+            JOIN PaidOption billOpt ON billOpt.code = billOptItem.paidOption
             JOIN Customer cust ON cust.id = ordr.customer.id
             JOIN Cart crt ON ordr.cart.id = crt.id
             JOIN Address shipAddr ON shipAddr.id = ordr.shippingAddress.id

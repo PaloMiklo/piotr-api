@@ -1,7 +1,7 @@
 package com.api.piotr.controller;
 
 import static com.api.piotr.constant.ApiPaths.BASE;
-import static com.api.piotr.constant.ApiPaths.PAYED_OPTION_ITEM_PATH;
+import static com.api.piotr.constant.ApiPaths.PAID_OPTION_ITEM_PATH;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,26 +11,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.api.piotr.dto.PayedOptionItemDto;
-import com.api.piotr.service.PayedOptionItemService;
+import com.api.piotr.dto.PaidOptionItemDto;
+import com.api.piotr.service.PaidOptionItemService;
 
 @RestController
-@RequestMapping(PAYED_OPTION_ITEM_PATH)
-public class PayedOptionItemController {
+@RequestMapping(PAID_OPTION_ITEM_PATH)
+public class PaidOptionItemController {
 
     private final String CODES = "codes";
 
-    private PayedOptionItemService payedOptionItemService;
+    private PaidOptionItemService paidOptionItemService;
 
-    public PayedOptionItemController(PayedOptionItemService payedOptionItemService) {
-        this.payedOptionItemService = payedOptionItemService;
+    public PaidOptionItemController(PaidOptionItemService paidOptionItemService) {
+        this.paidOptionItemService = paidOptionItemService;
     }
 
     @GetMapping(BASE)
-    public ResponseEntity<Page<PayedOptionItemDto>> getAllItemsByPayedOptionCodes(
+    public ResponseEntity<Page<PaidOptionItemDto>> getAllItemsByPaidOptionCodes(
             Pageable pageable,
             @RequestParam(name = CODES, required = false) String codes) {
-        Page<PayedOptionItemDto> items = payedOptionItemService.getAllItemsByPayedOptionCodes(pageable, codes);
+        Page<PaidOptionItemDto> items = paidOptionItemService.getAllItemsByPaidOptionCodes(pageable, codes);
         return ResponseEntity.ok(items);
     }
 }

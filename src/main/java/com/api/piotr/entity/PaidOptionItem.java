@@ -1,6 +1,7 @@
 package com.api.piotr.entity;
 
 import java.math.BigDecimal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,11 +15,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity
-@Table(name = "payed_option_item")
+@Table(name = "paid_option_item")
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class PayedOptionItem {
+public class PaidOptionItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,8 +31,8 @@ public class PayedOptionItem {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "payed_option", nullable = false)
-    private PayedOption payedOption;
+    @JoinColumn(name = "paid_option", nullable = false)
+    private PaidOption paidOption;
 
     @Column(nullable = false)
     private BigDecimal price;

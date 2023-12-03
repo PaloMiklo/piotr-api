@@ -1,4 +1,4 @@
--- checksum 3002030990
+-- checksum 3002030991
 --DROP TABLES IF EXISTS
 DROP TABLE IF EXISTS public.cart_line CASCADE;
 
@@ -14,22 +14,22 @@ DROP TABLE IF EXISTS public.customer CASCADE;
 
 DROP TABLE IF EXISTS public.product CASCADE;
 
-DROP TABLE IF EXISTS public.payed_option_item CASCADE;
+DROP TABLE IF EXISTS public.paid_option_item CASCADE;
 
-DROP TABLE IF EXISTS public.payed_option CASCADE;
+DROP TABLE IF EXISTS public.paid_option CASCADE;
 
 DROP TABLE IF EXISTS public.country CASCADE;
 
 -- CREATE TABLES
-CREATE TABLE public.payed_option(
+CREATE TABLE public.paid_option(
   code VARCHAR(50) PRIMARY KEY,
   name VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE public.payed_option_item(
+CREATE TABLE public.paid_option_item(
   code VARCHAR(50) PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
-  payed_option VARCHAR(50) NOT NULL REFERENCES payed_option(code),
+  paid_option VARCHAR(50) NOT NULL REFERENCES paid_option(code),
   price NUMERIC NOT NULL
 );
 
@@ -76,8 +76,8 @@ CREATE TABLE public.cart (
 CREATE TABLE public.order_table (
   id SERIAL PRIMARY KEY,
   customer_id INTEGER NOT NULL REFERENCES customer(id),
-  delivery_option_item_code VARCHAR(50) NOT NULL REFERENCES payed_option_item(code),
-  billing_option_item_code VARCHAR(50) NOT NULL REFERENCES payed_option_item(code),
+  delivery_option_item_code VARCHAR(50) NOT NULL REFERENCES paid_option_item(code),
+  billing_option_item_code VARCHAR(50) NOT NULL REFERENCES paid_option_item(code),
   created_fe TIMESTAMP NOT NULL DEFAULT NOW(),
   comment TEXT,
   shipping_address INTEGER NOT NULL REFERENCES address(id),
@@ -101,9 +101,9 @@ CREATE TABLE public.country (
 
 -- ADD CONSTRAINTS
 ALTER TABLE
-  public.payed_option_item
+  public.paid_option_item
 ADD
-  CONSTRAINT fk_payed_option FOREIGN KEY (payed_option) REFERENCES public.payed_option(code);
+  CONSTRAINT fk_paid_option FOREIGN KEY (paid_option) REFERENCES public.paid_option(code);
 
 ALTER TABLE
   public.product
@@ -118,12 +118,12 @@ ADD
 ALTER TABLE
   public.order_table
 ADD
-  CONSTRAINT fk_order_delivery_option FOREIGN KEY (delivery_option_item_code) REFERENCES public.payed_option_item(code);
+  CONSTRAINT fk_order_delivery_option FOREIGN KEY (delivery_option_item_code) REFERENCES public.paid_option_item(code);
 
 ALTER TABLE
   public.order_table
 ADD
-  CONSTRAINT fk_order_billing_option FOREIGN KEY (billing_option_item_code) REFERENCES public.payed_option_item(code);
+  CONSTRAINT fk_order_billing_option FOREIGN KEY (billing_option_item_code) REFERENCES public.paid_option_item(code);
 
 ALTER TABLE
   public.order_table
@@ -152,17 +152,17 @@ ADD
 
 -- INSERT MOCK DATA
 INSERT INTO
-  public.payed_option (code, name)
+  public.paid_option (code, name)
 VALUES
   ('SHIPPING', 'Shipping');
 
 INSERT INTO
-  public.payed_option (code, name)
+  public.paid_option (code, name)
 VALUES
   ('PAYMENT', 'Payment');
 
 INSERT INTO
-  public.payed_option_item (code, name, payed_option, price)
+  public.paid_option_item (code, name, paid_option, price)
 VALUES
   (
     'CART-PAYMENT',
@@ -172,7 +172,7 @@ VALUES
   );
 
 INSERT INTO
-  public.payed_option_item (code, name, payed_option, price)
+  public.paid_option_item (code, name, paid_option, price)
 VALUES
   (
     'CASH_ON_DELIVERY-PAYMENT',
@@ -182,7 +182,7 @@ VALUES
   );
 
 INSERT INTO
-  public.payed_option_item (code, name, payed_option, price)
+  public.paid_option_item (code, name, paid_option, price)
 VALUES
   (
     'GROUND-SHIPPING',
@@ -192,7 +192,7 @@ VALUES
   );
 
 INSERT INTO
-  public.payed_option_item (code, name, payed_option, price)
+  public.paid_option_item (code, name, paid_option, price)
 VALUES
   (
     '2_DAY_SHIPPING-SHIPPING',
@@ -202,7 +202,7 @@ VALUES
   );
 
 INSERT INTO
-  public.payed_option_item (code, name, payed_option, price)
+  public.paid_option_item (code, name, paid_option, price)
 VALUES
   (
     'OVERNIGHT_SHIPPING-SHIPPING',

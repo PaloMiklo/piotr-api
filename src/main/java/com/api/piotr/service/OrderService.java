@@ -1,6 +1,6 @@
 package com.api.piotr.service;
 
-import static com.api.piotr.util.PayedOptionItemWrite.createInstance;
+import static com.api.piotr.util.PaidOptionItemWrite.createInstance;
 import static java.util.stream.Collectors.toList;
 
 import java.util.stream.Stream;

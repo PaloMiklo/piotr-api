@@ -1,6 +1,6 @@
 package com.api.piotr.constant;
 
-public interface PayedOptions {
+public interface PaidOptions {
     public static String PAYMENT = "PAYMENT";
     public static String CART_PAYMENT = "CART-PAYMENT";
     public static String CASH_ON_DELIVERY_PAYMENT = "CASH_ON_DELIVERY-PAYMENT";

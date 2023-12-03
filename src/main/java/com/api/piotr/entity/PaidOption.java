@@ -14,12 +14,12 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "payed_option")
+@Table(name = "paid_option")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class PayedOption implements CodeReference {
+public class PaidOption implements CodeReference {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include

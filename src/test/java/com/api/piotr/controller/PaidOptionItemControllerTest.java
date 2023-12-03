@@ -1,12 +1,12 @@
 package com.api.piotr.controller;
 
-import static com.api.piotr.constant.PayedOptions.CART_PAYMENT;
-import static com.api.piotr.constant.PayedOptions.CASH_ON_DELIVERY_PAYMENT;
-import static com.api.piotr.constant.PayedOptions.GROUND_SHIPPING;
-import static com.api.piotr.constant.PayedOptions.OVERNIGHT_SHIPPING_SHIPPING;
-import static com.api.piotr.constant.PayedOptions.PAYMENT;
-import static com.api.piotr.constant.PayedOptions.SHIPPING;
-import static com.api.piotr.constant.PayedOptions.TWO_DAY_SHIPPING_SHIPPING;
+import static com.api.piotr.constant.PaidOptions.CART_PAYMENT;
+import static com.api.piotr.constant.PaidOptions.CASH_ON_DELIVERY_PAYMENT;
+import static com.api.piotr.constant.PaidOptions.GROUND_SHIPPING;
+import static com.api.piotr.constant.PaidOptions.OVERNIGHT_SHIPPING_SHIPPING;
+import static com.api.piotr.constant.PaidOptions.PAYMENT;
+import static com.api.piotr.constant.PaidOptions.SHIPPING;
+import static com.api.piotr.constant.PaidOptions.TWO_DAY_SHIPPING_SHIPPING;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
@@ -34,11 +34,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.api.piotr.constant.ApiPaths;
-import com.api.piotr.dto.PayedOptionItemDto;
-import com.api.piotr.service.PayedOptionItemService;
+import com.api.piotr.dto.PaidOptionItemDto;
+import com.api.piotr.service.PaidOptionItemService;
 
-@WebMvcTest(PayedOptionItemController.class)
-public class PayedOptionItemControllerTest {
+@WebMvcTest(PaidOptionItemController.class)
+public class PaidOptionItemControllerTest {
 
         private static Random random = new Random();
 
@@ -46,44 +46,44 @@ public class PayedOptionItemControllerTest {
         private MockMvc mockMvc;
 
         @MockBean
-        private PayedOptionItemService payedOptionItemService;
+        private PaidOptionItemService paidOptionItemService;
 
         @Test
-        public void getAllItemsByPayedOptionCodes() throws Exception {
+        public void getAllItemsByPaidOptionCodes() throws Exception {
                 assertTimeout(Duration.ofMillis(110), () -> {
-                        Page<PayedOptionItemDto> items = new PageImpl<>(List.of(
-                                        new PayedOptionItemDto(CART_PAYMENT,
+                        Page<PaidOptionItemDto> items = new PageImpl<>(List.of(
+                                        new PaidOptionItemDto(CART_PAYMENT,
                                                         CART_PAYMENT,
                                                         BigDecimal.valueOf(random.nextDouble())),
-                                        new PayedOptionItemDto(CASH_ON_DELIVERY_PAYMENT,
+                                        new PaidOptionItemDto(CASH_ON_DELIVERY_PAYMENT,
                                                         CASH_ON_DELIVERY_PAYMENT,
                                                         BigDecimal.valueOf(random.nextDouble())),
-                                        new PayedOptionItemDto(TWO_DAY_SHIPPING_SHIPPING,
+                                        new PaidOptionItemDto(TWO_DAY_SHIPPING_SHIPPING,
                                                         TWO_DAY_SHIPPING_SHIPPING,
                                                         BigDecimal.valueOf(random.nextDouble())),
-                                        new PayedOptionItemDto(GROUND_SHIPPING,
+                                        new PaidOptionItemDto(GROUND_SHIPPING,
                                                         GROUND_SHIPPING,
                                                         BigDecimal.valueOf(random.nextDouble())),
-                                        new PayedOptionItemDto(OVERNIGHT_SHIPPING_SHIPPING,
+                                        new PaidOptionItemDto(OVERNIGHT_SHIPPING_SHIPPING,
                                                         OVERNIGHT_SHIPPING_SHIPPING,
                                                         BigDecimal.valueOf(random.nextDouble()))));
 
                         String codes = String.format("%s,%s", SHIPPING, PAYMENT);
 
-                        given(payedOptionItemService.getAllItemsByPayedOptionCodes(any(Pageable.class), any()))
+                        given(paidOptionItemService.getAllItemsByPaidOptionCodes(any(Pageable.class), any()))
                                         .willReturn(items);
 
-                        mockMvc.perform(get(ApiPaths.PAYED_OPTION_ITEM_PATH)
+                        mockMvc.perform(get(ApiPaths.PAID_OPTION_ITEM_PATH)
                                         .param(codes, codes))
                                         .andExpect(status().isOk())
                                         .andExpect(jsonPath("$.content", hasSize(5)))
                                         .andExpect(jsonPath("$.content[0].code", is(CART_PAYMENT)))
                                         .andExpect(jsonPath("$.content[1].code", is(CASH_ON_DELIVERY_PAYMENT)));
 
-                        verify(payedOptionItemService, times(1))
-                                        .getAllItemsByPayedOptionCodes(any(Pageable.class), any());
+                        verify(paidOptionItemService, times(1))
+                                        .getAllItemsByPaidOptionCodes(any(Pageable.class), any());
 
-                        verifyNoMoreInteractions(payedOptionItemService);
+                        verifyNoMoreInteractions(paidOptionItemService);
                 });
         }
 }

@@ -34,11 +34,11 @@ public class OrderTable {
 
     @ManyToOne
     @JoinColumn(name = "delivery_option_item_code", nullable = false)
-    private PayedOptionItem deliveryOption;
+    private PaidOptionItem deliveryOption;
 
     @ManyToOne
     @JoinColumn(name = "billing_option_item_code", nullable = false)
-    private PayedOptionItem billingOption;
+    private PaidOptionItem billingOption;
 
     @Column(name = "created_fe", nullable = false)
     private LocalDateTime created;

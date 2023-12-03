@@ -1,7 +1,7 @@
 package com.api.piotr.util;
 
-import static com.api.piotr.constant.PayedOptions.PAYMENT;
-import static com.api.piotr.constant.PayedOptions.TWO_DAY_SHIPPING_SHIPPING;
+import static com.api.piotr.constant.PaidOptions.PAYMENT;
+import static com.api.piotr.constant.PaidOptions.TWO_DAY_SHIPPING_SHIPPING;
 import static com.api.piotr.util.Utils.rethrow;
 import static java.lang.Math.floor;
 import static java.lang.Math.random;
@@ -25,8 +25,8 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Random;
 
-import com.api.piotr.entity.PayedOption;
-import com.api.piotr.entity.PayedOptionItem;
+import com.api.piotr.entity.PaidOption;
+import com.api.piotr.entity.PaidOptionItem;
 
 public class ObjectRandomizer {
     private static Random random = new Random();
@@ -131,11 +131,11 @@ public class ObjectRandomizer {
                     case "Map":
                         field.set(object, new HashMap<>());
                         break;
-                    case "PayedOption":
-                        field.set(object, new PayedOption(PAYMENT, PAYMENT.toLowerCase()));
+                    case "PaidOption":
+                        field.set(object, new PaidOption(PAYMENT, PAYMENT.toLowerCase()));
                         break;
-                    case "PayedOptionItem":
-                        field.set(object, PayedOptionItemWrite.createInstance(TWO_DAY_SHIPPING_SHIPPING));
+                    case "PaidOptionItem":
+                        field.set(object, PaidOptionItemWrite.createInstance(TWO_DAY_SHIPPING_SHIPPING));
                         break;
                     case "Byte":
                     case "byte[]":
@@ -221,10 +221,10 @@ public class ObjectRandomizer {
                     value = bytes;
                     break;
                 default:
-                    if (type == PayedOption.class) {
-                        value = new PayedOption(PAYMENT, PAYMENT.toLowerCase());
-                    } else if (type == PayedOptionItem.class) {
-                        value = PayedOptionItemWrite.createInstance(TWO_DAY_SHIPPING_SHIPPING);
+                    if (type == PaidOption.class) {
+                        value = new PaidOption(PAYMENT, PAYMENT.toLowerCase());
+                    } else if (type == PaidOptionItem.class) {
+                        value = PaidOptionItemWrite.createInstance(TWO_DAY_SHIPPING_SHIPPING);
                     } else if (type.isEnum()) {
                         var constants = type.getEnumConstants();
                         value = floor(random() * constants.length);
