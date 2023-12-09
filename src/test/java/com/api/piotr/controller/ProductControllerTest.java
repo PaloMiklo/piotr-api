@@ -49,6 +49,7 @@ import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBo
 import com.api.piotr.dto.ProductDetDto;
 import com.api.piotr.dto.ProductNewDto;
 import com.api.piotr.dto.ProductRowDto;
+import com.api.piotr.repository.ImageRepository;
 import com.api.piotr.service.ImageTableService;
 import com.api.piotr.service.OrderService;
 import com.api.piotr.service.ProductService;
@@ -68,6 +69,9 @@ public class ProductControllerTest {
 
     @MockBean
     private OrderService orderService;
+
+    @MockBean
+    private ImageRepository ImageRepository;
 
     @MockBean
     private ImageTableService imageService;

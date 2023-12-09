@@ -8,10 +8,12 @@ import com.api.piotr.entity.Cart;
 import com.api.piotr.entity.CartLine;
 import com.api.piotr.entity.Product;
 
+import jakarta.validation.constraints.PositiveOrZero;
+
 public record CartLineNewDto(
         Long productId,
-        BigDecimal productPrice,
-        Integer amount) {
+        @PositiveOrZero BigDecimal productPrice,
+        @PositiveOrZero Integer amount) {
     public CartLine toEntity(Cart cart) {
         var cartLine = new CartLine();
         cartLine.setAmount(amount);

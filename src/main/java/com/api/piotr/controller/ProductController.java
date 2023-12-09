@@ -17,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,8 +34,11 @@ import com.api.piotr.dto.ProductRowDto;
 import com.api.piotr.service.ImageTableService;
 import com.api.piotr.service.ProductService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(PRODUCT_PATH)
+@Validated
 public class ProductController {
 
     private final String PRODUCT = "product";
@@ -71,7 +75,7 @@ public class ProductController {
 
     @PostMapping(path = PRODUCT_CREATE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> createProduct(
-            @RequestPart(PRODUCT) ProductNewDto productDto,
+            @RequestPart(PRODUCT) @Valid ProductNewDto productDto,
             @RequestPart(IMAGE) MultipartFile image) {
         Long productId = productService.createProduct(productDto, image);
         URI location = ServletUriComponentsBuilder

@@ -78,7 +78,7 @@ CREATE TABLE public.order_table (
   customer_id INTEGER NOT NULL REFERENCES customer(id),
   delivery_option_item_code VARCHAR(50) NOT NULL REFERENCES paid_option_item(code),
   billing_option_item_code VARCHAR(50) NOT NULL REFERENCES paid_option_item(code),
-  created_fe TIMESTAMP WITH TIME ZONE  NOT NULL DEFAULT NOW(),
+  created_fe TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
   note TEXT,
   shipping_address INTEGER NOT NULL REFERENCES address(id),
   billing_address INTEGER NOT NULL REFERENCES address(id),

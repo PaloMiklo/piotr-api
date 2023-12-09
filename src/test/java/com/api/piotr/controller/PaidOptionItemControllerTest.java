@@ -35,6 +35,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.api.piotr.constant.ApiPaths;
 import com.api.piotr.dto.PaidOptionItemDto;
+import com.api.piotr.repository.ImageRepository;
 import com.api.piotr.service.PaidOptionItemService;
 
 @WebMvcTest(PaidOptionItemController.class)
@@ -47,6 +48,9 @@ public class PaidOptionItemControllerTest {
 
         @MockBean
         private PaidOptionItemService paidOptionItemService;
+
+        @MockBean
+        private ImageRepository ImageRepository;
 
         @Test
         public void getAllItemsByPaidOptionCodes() throws Exception {

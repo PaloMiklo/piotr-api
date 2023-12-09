@@ -4,11 +4,13 @@ import java.math.BigDecimal;
 import java.util.Set;
 
 import jakarta.annotation.Nullable;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 
 public record CartNewDto(
-                @Nullable Long id,
-                Boolean freeShipping,
-                Integer itemCount,
-                BigDecimal cartPrice,
-                Set<CartLineNewDto> lines) {
+        @Nullable Long id,
+        Boolean freeShipping,
+        @Positive Integer itemCount,
+        @Positive BigDecimal cartPrice,
+        @Valid Set<CartLineNewDto> lines) {
 }

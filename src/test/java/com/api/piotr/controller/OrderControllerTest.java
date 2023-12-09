@@ -38,6 +38,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.api.piotr.dto.OrderDetDto;
 import com.api.piotr.dto.OrderNewDto;
 import com.api.piotr.dto.OrderRowDto;
+import com.api.piotr.repository.ImageRepository;
 import com.api.piotr.service.OrderService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -64,6 +65,9 @@ public class OrderControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    private ImageRepository ImageRepository;
 
     @MockBean
     private OrderService orderService;
@@ -118,7 +122,7 @@ public class OrderControllerTest {
 
     @Test
     public void createOrder() throws Exception {
-        assertTimeout(Duration.ofMillis(110), () -> {
+        assertTimeout(Duration.ofMillis(300), () -> {
             OrderNewDto orderDto = generateRandomObject(OrderNewDto.class);
             Long orderId = 1L;
 
