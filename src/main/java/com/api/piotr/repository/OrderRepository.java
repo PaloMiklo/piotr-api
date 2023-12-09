@@ -22,7 +22,7 @@ public interface OrderRepository extends _HibernateRepository<OrderTable>, JpaRe
                      cust.lastName,
                      cust.email
                 ),
-                ordr.created
+                ordr.createdUi
              )
              FROM OrderTable ordr
              JOIN Customer cust ON cust.id = ordr.customer.id
@@ -50,8 +50,8 @@ public interface OrderRepository extends _HibernateRepository<OrderTable>, JpaRe
                     billOpt.code,
                     billOptItem.price
                 ),
-                ordr.created,
-                ordr.comment,
+                ordr.createdUi,
+                ordr.note,
                 new com.api.piotr.dto.AddressDetDto(
                     shipAddr.id,
                     shipAddr.street,

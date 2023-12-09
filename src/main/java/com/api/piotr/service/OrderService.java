@@ -58,12 +58,12 @@ public class OrderService {
                                 orderDetWthtLines.customer(),
                                 orderDetWthtLines.deliveryOption(),
                                 orderDetWthtLines.billingOption(),
-                                orderDetWthtLines.created(),
-                                orderDetWthtLines.comment(),
+                                orderDetWthtLines.createdUi(),
+                                orderDetWthtLines.note(),
                                 orderDetWthtLines.shippingAddress(),
                                 orderDetWthtLines.billingAddress(),
                                 cartWthLines);
-        }
+        };
 
         public Long createOrder(OrderNewDto order) {
                 var savedCustomer = customerRepository.persist((Customer.builder()
@@ -80,7 +80,7 @@ public class OrderService {
 
                 var savedLines = cartLineRepository.persistAll(order.cart().lines()
                                 .stream().map(cartLineNewDto -> {
-                                        return cartLineNewDto.toEntity(cartLineNewDto.productId(), savedCart);
+                                        return cartLineNewDto.toEntity(savedCart);
                                 }).collect(toList()));
 
                 savedCart.setLines(savedLines);
@@ -94,8 +94,8 @@ public class OrderService {
                 finalOrder.setCustomer(savedCustomer);
                 finalOrder.setDeliveryOption(createInstance(order.deliveryOptionItemCode()));
                 finalOrder.setBillingOption(createInstance(order.billingOptionItemCode()));
-                finalOrder.setCreated(order.created());
-                finalOrder.setComment(order.comment());
+                finalOrder.setCreatedUi(order.createdUi());
+                finalOrder.setNote(order.note());
                 finalOrder.setShippingAddress(savedAddresses.get(0));
                 finalOrder.setBillingAddress(savedAddresses.get(1));
                 finalOrder.setCart(savedCart);

@@ -10,12 +10,12 @@ import com.api.piotr.entity.Product;
 
 public record CartLineNewDto(
         Long productId,
-        Integer amount,
-        BigDecimal lineTotal) {
-    public CartLine toEntity(Long productId, Cart cart) {
+        BigDecimal productPrice,
+        Integer amount) {
+    public CartLine toEntity(Cart cart) {
         var cartLine = new CartLine();
         cartLine.setAmount(amount);
-        cartLine.setLineTotal(lineTotal);
+        cartLine.setLineTotal(productPrice.multiply(BigDecimal.valueOf(amount)));
         cartLine.setProduct(createIdRef(Product.class, productId));
         cartLine.setCart(cart);
         return cartLine;

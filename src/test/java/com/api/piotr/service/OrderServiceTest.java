@@ -128,7 +128,7 @@ public class OrderServiceTest {
 
             List<CartLine> savedLines = newOrder.cart().lines()
                     .stream().map(cartLineNewDto -> {
-                        return cartLineNewDto.toEntity(cartLineNewDto.productId(), savedCart);
+                        return cartLineNewDto.toEntity(savedCart);
                     }).collect(toList());
 
             List<Address> savedAddresses = Stream.of(newOrder.shippingAddress(), newOrder.billingAddress())
@@ -139,8 +139,8 @@ public class OrderServiceTest {
             finalOrder.setCustomer(savedCustomer);
             finalOrder.setDeliveryOption(createInstance(newOrder.deliveryOptionItemCode()));
             finalOrder.setBillingOption(createInstance(newOrder.billingOptionItemCode()));
-            finalOrder.setCreated(newOrder.created());
-            finalOrder.setComment(newOrder.comment());
+            finalOrder.setCreatedUi(newOrder.createdUi());
+            finalOrder.setNote(newOrder.note());
             finalOrder.setShippingAddress(savedAddresses.get(0));
             finalOrder.setBillingAddress(savedAddresses.get(1));
             finalOrder.setCart(savedCart);

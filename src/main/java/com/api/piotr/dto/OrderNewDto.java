@@ -8,8 +8,8 @@ public record OrderNewDto(
                 CustomerNewDto customer,
                 String deliveryOptionItemCode,
                 String billingOptionItemCode,
-                LocalDateTime created,
-                @Nullable String comment,
+                LocalDateTime createdUi,
+                @Nullable String note,
                 AddressNewDto shippingAddress,
                 AddressNewDto billingAddress,
                 CartNewDto cart) {

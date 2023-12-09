@@ -41,10 +41,10 @@ public class OrderTable {
     private PaidOptionItem billingOption;
 
     @Column(name = "created_fe", nullable = false)
-    private LocalDateTime created;
+    private LocalDateTime createdUi;
 
     @Nullable
-    private String comment;
+    private String note;
 
     @ManyToOne
     @JoinColumn(name = "shipping_address", nullable = false)
