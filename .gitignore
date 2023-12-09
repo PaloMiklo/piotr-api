@@ -16,3 +16,5 @@ images/
 /target/
 !/target/*.jar
 rest.http
+
+.env

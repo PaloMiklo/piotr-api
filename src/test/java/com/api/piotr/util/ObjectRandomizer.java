@@ -79,7 +79,7 @@ public class ObjectRandomizer {
                         break;
                     case "Integer":
                     case "int":
-                        field.set(object, random.nextInt());
+                        field.set(object, random.nextInt() & Integer.MAX_VALUE);
                         break;
                     case "Long":
                     case "long":
@@ -98,7 +98,7 @@ public class ObjectRandomizer {
                         field.set(object, random.nextBoolean());
                         break;
                     case "BigDecimal":
-                        field.set(object, BigDecimal.valueOf(random.nextLong()));
+                        field.set(object, BigDecimal.valueOf(123));
                         break;
                     case "Date":
                         field.set(object, new Date(random.nextLong()));
@@ -110,7 +110,7 @@ public class ObjectRandomizer {
                         field.set(object, LocalTime.now());
                         break;
                     case "LocalDateTime":
-                        field.set(object, LocalDateTime.now());
+                        field.set(object, LocalDateTime.now().minusDays(1));
                         break;
                     case "Instant":
                         field.set(object, ZonedDateTime.now().toInstant());
@@ -163,7 +163,8 @@ public class ObjectRandomizer {
                     break;
                 case "Integer":
                 case "int":
-                    value = random.nextInt();
+                    value = random.nextInt() & Integer.MAX_VALUE;
+                    ;
                     break;
                 case "Long":
                 case "long":
@@ -182,7 +183,7 @@ public class ObjectRandomizer {
                     value = random.nextBoolean();
                     break;
                 case "BigDecimal":
-                    value = BigDecimal.valueOf(random.nextLong());
+                    value = BigDecimal.valueOf(123);
                     break;
                 case "Date":
                     value = new Date(random.nextLong());

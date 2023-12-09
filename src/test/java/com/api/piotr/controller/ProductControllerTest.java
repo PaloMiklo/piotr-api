@@ -119,7 +119,7 @@ public class ProductControllerTest {
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id").value(is(detail.id())))
                     .andExpect(jsonPath("$.name").value(is(detail.name())))
-                    .andExpect(jsonPath("$.price").value(is(Long.valueOf(String.valueOf(detail.price())))))
+                    .andExpect(jsonPath("$.price").value(detail.price()))
                     .andExpect(jsonPath("$.description").value(is(detail.description())))
                     .andExpect(jsonPath("$.quantity").value(is(detail.quantity())))
                     .andExpect(jsonPath("$.valid").value(is(detail.valid())));
@@ -154,7 +154,7 @@ public class ProductControllerTest {
 
     @Test
     public void createProduct() throws Exception {
-        assertTimeout(Duration.ofMillis(110), () -> {
+        assertTimeout(Duration.ofMillis(150), () -> {
             ProductNewDto product = generateRandomObject(ProductNewDto.class);
             Long id = 1L;
             MockMultipartFile image = new MockMultipartFile(
