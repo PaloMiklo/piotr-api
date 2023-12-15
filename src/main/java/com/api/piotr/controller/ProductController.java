@@ -6,16 +6,20 @@ import static com.api.piotr.constant.ApiPaths.PRODUCT_DETAIL;
 import static com.api.piotr.constant.ApiPaths.PRODUCT_IMAGE;
 import static com.api.piotr.constant.ApiPaths.PRODUCT_LIST;
 import static com.api.piotr.constant.ApiPaths.PRODUCT_PATH;
+import static java.util.concurrent.TimeUnit.DAYS;
+import static org.springframework.http.CacheControl.maxAge;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.IMAGE_JPEG;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+import static org.springframework.http.ResponseEntity.created;
+import static org.springframework.http.ResponseEntity.ok;
 
 import java.net.URI;
-import java.util.concurrent.TimeUnit;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -55,25 +59,25 @@ public class ProductController {
     @GetMapping(PRODUCT_LIST)
     public ResponseEntity<Page<ProductRowDto>> getAllProducts(Pageable pageable) {
         Page<ProductRowDto> products = productService.getAllProducts(pageable);
-        return ResponseEntity.ok(products);
+        return ok(products);
     }
 
     @GetMapping(PRODUCT_DETAIL)
     public ResponseEntity<ProductDetDto> getProductById(@PathVariable Long id) {
         ProductDetDto product = productService.getProductById(id);
-        return ResponseEntity.ok(product);
+        return ok(product);
     }
 
     @GetMapping(PRODUCT_IMAGE)
     public ResponseEntity<StreamingResponseBody> getImageByProductId(@PathVariable Long id) {
         StreamingResponseBody responseBody = imageService.getImageByProductId(id);
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.IMAGE_JPEG);
-        headers.setCacheControl(CacheControl.maxAge(1, TimeUnit.DAYS).cachePublic().getHeaderValue());
-        return new ResponseEntity<>(responseBody, headers, HttpStatus.OK);
+        headers.setContentType(IMAGE_JPEG);
+        headers.setCacheControl(maxAge(1, DAYS).cachePublic().getHeaderValue());
+        return new ResponseEntity<>(responseBody, headers, OK);
     }
 
-    @PostMapping(path = PRODUCT_CREATE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = PRODUCT_CREATE, consumes = MULTIPART_FORM_DATA_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> createProduct(
             @RequestPart(PRODUCT) @Valid ProductNewDto productDto,
             @RequestPart(IMAGE) MultipartFile image) {
@@ -83,6 +87,6 @@ public class ProductController {
                 .path(DETAIL)
                 .buildAndExpand(productId)
                 .toUri();
-        return ResponseEntity.created(location).body(productId);
+        return created(location).body(productId);
     }
 }

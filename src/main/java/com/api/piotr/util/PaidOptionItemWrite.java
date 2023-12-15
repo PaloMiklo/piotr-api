@@ -17,7 +17,7 @@ public class PaidOptionItemWrite {
     }
 
     private static PaidOption extractCodeAfterDash(String itemCode) {
-        int dashIndex = itemCode.indexOf("-");
+        var dashIndex = itemCode.indexOf("-");
         if (dashIndex != -1 && dashIndex + 1 < itemCode.length()) {
             return createCodeRef(PaidOption.class, itemCode.substring(dashIndex + 1));
         } else {

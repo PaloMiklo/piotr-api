@@ -2,6 +2,7 @@ package com.api.piotr.service;
 
 import static com.api.piotr.util.ObjectRandomizer.generateRandomObject;
 import static com.api.piotr.util.Utils.mapToList;
+import static java.util.Optional.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
 import static org.mockito.ArgumentMatchers.any;
@@ -12,7 +13,6 @@ import static org.mockito.Mockito.when;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Random;
 
 import org.junit.jupiter.api.Test;
@@ -68,7 +68,7 @@ public class ProductServiceTest {
             ProductDetDto detail = generateRandomObject(ProductDetDto.class);
             Long id = detail.id();
 
-            when(productRepository.findProductById(id)).thenReturn(Optional.of(detail));
+            when(productRepository.findProductById(id)).thenReturn(of(detail));
 
             ProductDetDto result = productService.getProductById(id);
 

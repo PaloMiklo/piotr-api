@@ -127,9 +127,7 @@ public class OrderServiceTest {
                     .build();
 
             List<CartLine> savedLines = newOrder.cart().lines()
-                    .stream().map(cartLineNewDto -> {
-                        return cartLineNewDto.toEntity(savedCart);
-                    }).collect(toList());
+                    .stream().map(cartLineNewDto -> cartLineNewDto.toEntity(savedCart)).collect(toList());
 
             List<Address> savedAddresses = Stream.of(newOrder.shippingAddress(), newOrder.billingAddress())
                     .map(AddressNewDto::toEntity)

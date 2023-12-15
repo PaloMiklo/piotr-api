@@ -5,6 +5,8 @@ import static com.api.piotr.constant.ApiPaths.PRODUCT_CREATE;
 import static com.api.piotr.constant.ApiPaths.PRODUCT_LIST;
 import static com.api.piotr.constant.ApiPaths.PRODUCT_PATH;
 import static com.api.piotr.util.ObjectRandomizer.generateRandomObject;
+import static java.lang.String.format;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -15,6 +17,11 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_PDF_VALUE;
+import static org.springframework.http.MediaType.IMAGE_JPEG_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -22,7 +29,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,15 +41,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
 
 import com.api.piotr.dto.ProductDetDto;
@@ -115,7 +117,7 @@ public class ProductControllerTest {
 
             given(productService.getProductById(detail.id())).willReturn(detail);
 
-            mockMvc.perform(get(String.format("%s/%s", PRODUCT_PATH, detail.id())))
+            mockMvc.perform(get(format("%s/%s", PRODUCT_PATH, detail.id())))
                     .andExpect(status().isOk())
                     .andExpect(jsonPath("$.id").value(is(detail.id())))
                     .andExpect(jsonPath("$.name").value(is(detail.name())))
@@ -142,13 +144,13 @@ public class ProductControllerTest {
 
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders
                 .get(PRODUCT_PATH + IMAGE, id))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andReturn();
 
         MockHttpServletResponse response = result.getResponse();
 
-        assertThat(response.getContentType()).isEqualTo(MediaType.IMAGE_JPEG_VALUE);
-        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.getContentType()).isEqualTo(IMAGE_JPEG_VALUE);
+        assertThat(response.getStatus()).isEqualTo(OK.value());
         assertArrayEquals(response.getContentAsByteArray(), imageBytes);
     }
 
@@ -160,27 +162,26 @@ public class ProductControllerTest {
             MockMultipartFile image = new MockMultipartFile(
                     "image",
                     "contract.jpeg",
-                    MediaType.APPLICATION_PDF_VALUE,
-                    "<<image data>>".getBytes(StandardCharsets.UTF_8));
+                    APPLICATION_PDF_VALUE,
+                    "<<image data>>".getBytes(UTF_8));
 
             ObjectMapper objectMapper = new ObjectMapper();
 
             MockMultipartFile dto = new MockMultipartFile(
                     "product",
                     "product",
-                    MediaType.APPLICATION_JSON_VALUE,
-                    objectMapper.writeValueAsString(product).getBytes(StandardCharsets.UTF_8));
+                    APPLICATION_JSON_VALUE,
+                    objectMapper.writeValueAsString(product).getBytes(UTF_8));
 
             given(productService.createProduct(any(), any())).willReturn(id);
 
             mockMvc.perform(
-                    multipart(String.format("%s%s", PRODUCT_PATH, PRODUCT_CREATE))
+                    multipart(format("%s%s", PRODUCT_PATH, PRODUCT_CREATE))
                             .file(dto)
                             .file(image)
-                            .accept(MediaType.APPLICATION_JSON))
+                            .accept(APPLICATION_JSON))
                     .andExpect(status().isCreated())
-                    .andExpect(header().string("Location", String.format("http://localhost/api/product/%s", id)))
-                    .andDo(MockMvcResultHandlers.print());
+                    .andExpect(header().string("Location", format("http://localhost/api/product/%s", id)));
 
             verify(productService, times(1)).createProduct(any(), any());
             verifyNoMoreInteractions(productService);

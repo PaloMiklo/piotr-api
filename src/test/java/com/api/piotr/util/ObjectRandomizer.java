@@ -5,6 +5,7 @@ import static com.api.piotr.constant.PaidOptions.TWO_DAY_SHIPPING_SHIPPING;
 import static com.api.piotr.util.Utils.rethrow;
 import static java.lang.Math.floor;
 import static java.lang.Math.random;
+import static java.util.Arrays.stream;
 import static java.util.UUID.randomUUID;
 import static java.util.stream.Collectors.joining;
 
@@ -19,7 +20,6 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Optional;
@@ -37,10 +37,10 @@ public class ObjectRandomizer {
 
         if (clazz.isRecord()) {
             Constructor<T> recordCnstrctr = clazz.getDeclaredConstructor(
-                    Arrays.stream(clazz.getRecordComponents())
+                    stream(clazz.getRecordComponents())
                             .map(recordComponent -> recordComponent.getType()).toArray(Class<?>[]::new));
 
-            Object[] recordCnstrctrArgs = Arrays.stream(clazz.getRecordComponents())
+            Object[] recordCnstrctrArgs = stream(clazz.getRecordComponents())
                     .map(recordComponent -> randomizeRecordFields(recordComponent)).toArray(Object[]::new);
 
             return recordCnstrctr.newInstance(recordCnstrctrArgs);
@@ -50,7 +50,7 @@ public class ObjectRandomizer {
     }
 
     public static String generateRandomString(Integer length) {
-        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
         var builder = new StringBuilder();
         builder.append(random.ints(length, 0, chars.length())
                 .mapToObj(i -> String.valueOf(chars.charAt(i)))
@@ -233,11 +233,11 @@ public class ObjectRandomizer {
                         try {
                             Class<?> nestedRecord = type;
                             Constructor<?> nestedRecordCnstrctr = nestedRecord.getDeclaredConstructor(
-                                    Arrays.stream(nestedRecord.getRecordComponents())
+                                    stream(nestedRecord.getRecordComponents())
                                             .map(recordComponent -> recordComponent.getType())
                                             .toArray(Class<?>[]::new));
 
-                            Object[] nestedRecordCnstrctrArgs = Arrays.stream(nestedRecord.getRecordComponents())
+                            Object[] nestedRecordCnstrctrArgs = stream(nestedRecord.getRecordComponents())
                                     .map(recordComponent -> randomizeRecordFields(recordComponent))
                                     .toArray(Object[]::new);
 

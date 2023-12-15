@@ -1,5 +1,6 @@
 package com.api.piotr.controller;
 
+import static com.api.piotr.constant.ApiPaths.PAID_OPTION_ITEM_PATH;
 import static com.api.piotr.constant.PaidOptions.CART_PAYMENT;
 import static com.api.piotr.constant.PaidOptions.CASH_ON_DELIVERY_PAYMENT;
 import static com.api.piotr.constant.PaidOptions.GROUND_SHIPPING;
@@ -7,6 +8,7 @@ import static com.api.piotr.constant.PaidOptions.OVERNIGHT_SHIPPING_SHIPPING;
 import static com.api.piotr.constant.PaidOptions.PAYMENT;
 import static com.api.piotr.constant.PaidOptions.SHIPPING;
 import static com.api.piotr.constant.PaidOptions.TWO_DAY_SHIPPING_SHIPPING;
+import static java.math.BigDecimal.valueOf;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
@@ -19,7 +21,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.List;
 import java.util.Random;
@@ -33,7 +34,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.api.piotr.constant.ApiPaths;
 import com.api.piotr.dto.PaidOptionItemDto;
 import com.api.piotr.repository.ImageRepository;
 import com.api.piotr.service.PaidOptionItemService;
@@ -58,26 +58,26 @@ public class PaidOptionItemControllerTest {
                         Page<PaidOptionItemDto> items = new PageImpl<>(List.of(
                                         new PaidOptionItemDto(CART_PAYMENT,
                                                         CART_PAYMENT,
-                                                        BigDecimal.valueOf(random.nextDouble())),
+                                                        valueOf(random.nextDouble())),
                                         new PaidOptionItemDto(CASH_ON_DELIVERY_PAYMENT,
                                                         CASH_ON_DELIVERY_PAYMENT,
-                                                        BigDecimal.valueOf(random.nextDouble())),
+                                                        valueOf(random.nextDouble())),
                                         new PaidOptionItemDto(TWO_DAY_SHIPPING_SHIPPING,
                                                         TWO_DAY_SHIPPING_SHIPPING,
-                                                        BigDecimal.valueOf(random.nextDouble())),
+                                                        valueOf(random.nextDouble())),
                                         new PaidOptionItemDto(GROUND_SHIPPING,
                                                         GROUND_SHIPPING,
-                                                        BigDecimal.valueOf(random.nextDouble())),
+                                                        valueOf(random.nextDouble())),
                                         new PaidOptionItemDto(OVERNIGHT_SHIPPING_SHIPPING,
                                                         OVERNIGHT_SHIPPING_SHIPPING,
-                                                        BigDecimal.valueOf(random.nextDouble()))));
+                                                        valueOf(random.nextDouble()))));
 
                         String codes = String.format("%s,%s", SHIPPING, PAYMENT);
 
                         given(paidOptionItemService.getAllItemsByPaidOptionCodes(any(Pageable.class), any()))
                                         .willReturn(items);
 
-                        mockMvc.perform(get(ApiPaths.PAID_OPTION_ITEM_PATH)
+                        mockMvc.perform(get(PAID_OPTION_ITEM_PATH)
                                         .param(codes, codes))
                                         .andExpect(status().isOk())
                                         .andExpect(jsonPath("$.content", hasSize(5)))

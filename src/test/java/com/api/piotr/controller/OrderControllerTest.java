@@ -3,6 +3,7 @@ package com.api.piotr.controller;
 import static com.api.piotr.constant.ApiPaths.ORDER_CREATE;
 import static com.api.piotr.constant.ApiPaths.ORDER_LIST;
 import static com.api.piotr.constant.ApiPaths.ORDER_PATH;
+import static com.api.piotr.util.MapperUtils.asJsonString;
 import static com.api.piotr.util.ObjectRandomizer.generateRandomObject;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
@@ -15,6 +16,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -32,7 +34,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.api.piotr.dto.OrderDetDto;
@@ -40,28 +41,9 @@ import com.api.piotr.dto.OrderNewDto;
 import com.api.piotr.dto.OrderRowDto;
 import com.api.piotr.repository.ImageRepository;
 import com.api.piotr.service.OrderService;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 
 @WebMvcTest(OrderController.class)
 public class OrderControllerTest {
-
-    private static String asJsonString(final Object obj) {
-        // with 3.0 (or with 2.10 as alternative)
-        ObjectMapper mapper = JsonMapper.builder()
-                .addModule(new ParameterNamesModule())
-                .addModule(new Jdk8Module())
-                .addModule(new JavaTimeModule())
-                .build();
-        try {
-            return mapper.writeValueAsString(obj);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Autowired
     private MockMvc mockMvc;
@@ -101,7 +83,7 @@ public class OrderControllerTest {
 
             mockMvc.perform(get(ORDER_PATH + "/{id}", 1L))
                     .andExpect(status().isOk())
-                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(content().contentType(APPLICATION_JSON))
                     .andExpect(jsonPath("$.id").isNumber())
                     .andExpect(jsonPath("$.customer").exists())
                     .andExpect(jsonPath("$.deliveryOption").exists())
@@ -129,7 +111,7 @@ public class OrderControllerTest {
             when(orderService.createOrder(orderDto)).thenReturn(orderId);
 
             mockMvc.perform(post(ORDER_PATH + ORDER_CREATE)
-                    .contentType(MediaType.APPLICATION_JSON)
+                    .contentType(APPLICATION_JSON)
                     .content(asJsonString(orderDto)))
                     .andExpect(status().isCreated())
                     .andExpect(header().string("Location", containsString("/api/order/" + orderId)))

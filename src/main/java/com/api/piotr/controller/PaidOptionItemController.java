@@ -2,6 +2,7 @@ package com.api.piotr.controller;
 
 import static com.api.piotr.constant.ApiPaths.BASE;
 import static com.api.piotr.constant.ApiPaths.PAID_OPTION_ITEM_PATH;
+import static org.springframework.http.ResponseEntity.ok;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +34,6 @@ public class PaidOptionItemController {
             Pageable pageable,
             @RequestParam(name = CODES, required = false) String codes) {
         Page<PaidOptionItemDto> items = paidOptionItemService.getAllItemsByPaidOptionCodes(pageable, codes);
-        return ResponseEntity.ok(items);
+        return ok(items);
     }
 }

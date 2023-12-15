@@ -4,12 +4,14 @@ import static com.api.piotr.constant.ApiPaths.ORDER_CREATE;
 import static com.api.piotr.constant.ApiPaths.ORDER_DETAIL;
 import static com.api.piotr.constant.ApiPaths.ORDER_LIST;
 import static com.api.piotr.constant.ApiPaths.ORDER_PATH;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.ResponseEntity.created;
+import static org.springframework.http.ResponseEntity.ok;
 
 import java.net.URI;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,16 +43,16 @@ public class OrderController {
     @GetMapping(ORDER_LIST)
     public ResponseEntity<Page<OrderRowDto>> getAllOrders(Pageable pageable) {
         Page<OrderRowDto> orders = orderService.getAllOrders(pageable);
-        return ResponseEntity.ok(orders);
+        return ok(orders);
     }
 
     @GetMapping(ORDER_DETAIL)
     public ResponseEntity<OrderDetDto> getOrderById(@PathVariable Long id) {
         OrderDetDto order = orderService.getOrderById(id);
-        return ResponseEntity.ok(order);
+        return ok(order);
     }
 
-    @PostMapping(path = ORDER_CREATE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = ORDER_CREATE, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<Long> create(@RequestBody @Valid OrderNewDto orderDto) {
         Long orderId = orderService.createOrder(orderDto);
         URI location = ServletUriComponentsBuilder
@@ -58,6 +60,6 @@ public class OrderController {
                 .path("/{id}")
                 .buildAndExpand(orderId)
                 .toUri();
-        return ResponseEntity.created(location).body(orderId);
+        return created(location).body(orderId);
     }
 }

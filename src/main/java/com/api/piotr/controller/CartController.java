@@ -2,8 +2,9 @@ package com.api.piotr.controller;
 
 import static com.api.piotr.constant.ApiPaths.CART;
 import static com.api.piotr.constant.ApiPaths.CART_RECALCULATE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.ResponseEntity.accepted;
 
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,9 +29,9 @@ public class CartController {
         this.cartService = cartService;
     }
 
-    @PostMapping(path = CART_RECALCULATE, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = CART_RECALCULATE, consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
     public ResponseEntity<CartRecalculateResultDto> recalculateCart(
             @RequestBody @Valid CartRecalculateDto recalculateDto) {
-        return ResponseEntity.accepted().body(cartService.recalculateCart(recalculateDto));
+        return accepted().body(cartService.recalculateCart(recalculateDto));
     }
 }
