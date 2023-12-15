@@ -6,7 +6,7 @@ To run the application, execute the following command:
 `./mvnw spring-boot:run`    
 
 To specify particular profile:      
-`./mvnw spring-boot:run -Dspring-boot.run.profiles={<dev,sentry,...>}`
+`./mvnw spring-boot:run -Dspring-boot.run.profiles=dev,sentry`
 
 The application will start and you can access it at http://localhost:8080.
 

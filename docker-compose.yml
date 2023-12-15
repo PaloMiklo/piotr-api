@@ -23,19 +23,3 @@ services:
       - ./servers.json:/pgadmin4/servers.json 
     depends_on:
       - piotr
-
- sentry-backend:
-    image: sentry:latest
-    ports:
-      - "9000:9000"
-    environment:
-      - SENTRY_DSN=http://localhost:8080
-      - SENTRY_ENVIRONMENT=production
-
-  sentry-frontend:
-    image: sentry:latest
-    ports:
-      - "9001:9001"
-    command: sentry-cli deploy
-    depends_on:
-      - sentry-backend
