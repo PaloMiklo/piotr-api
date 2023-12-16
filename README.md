@@ -17,9 +17,9 @@ Here are some useful commands that you can use with `mvnw` or `mvn`:
 `mvnw compile`: compiles the application      
 `mvnw package`: packages the application as a JAR file  
 `mvn clean package`: cleans the build directory    
-`mvnw test`: runs the unit tests. 
-`mvnw dependency:resolve`: resolves all dependencies required by the project and downloads them to your local repository   
-`./mvnw dependency:tree`: Displays the dependency tree of the project     
+`mvnw test`: runs the unit tests       
+`mvnw dependency:resolve`: resolves all dependencies required by the project and downloads them to your local repository        
+`./mvnw dependency:tree`: Displays the dependency tree of the project        
 `./mvnw spring-boot:run`: Runs the Spring Boot application     
 Note that if you're using mvn instead of mvnw, replace ./mvnw with mvn in the above commands      
 
