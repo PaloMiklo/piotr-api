@@ -3,6 +3,7 @@ package com.api.piotr.service;
 import static com.api.piotr.util.ObjectRandomizer.generateRandomObject;
 import static com.api.piotr.util.PaidOptionItemWrite.createInstance;
 import static com.api.piotr.util.Utils.mapToList;
+import static java.time.Duration.ofMillis;
 import static java.util.stream.Collectors.toList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
@@ -11,7 +12,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,6 +43,7 @@ import com.api.piotr.repository.CartRepository;
 import com.api.piotr.repository.CustomerRepository;
 import com.api.piotr.repository.OrderRepository;
 import com.api.piotr.repository.ProductRepository;
+import com.api.piotr.util.Duration;
 
 @ExtendWith(MockitoExtension.class)
 public class OrderServiceTest {
@@ -65,7 +66,7 @@ public class OrderServiceTest {
 
     @Test
     public void getAllOrders() throws Exception {
-        assertTimeout(Duration.ofMillis(110), () -> {
+        assertTimeout(ofMillis(Duration.LEVEL_I.getValue()), () -> {
             List<OrderRowDto> orders = new ArrayList<OrderRowDto>();
             orders.add(generateRandomObject(OrderRowDto.class));
             orders.add(generateRandomObject(OrderRowDto.class));
@@ -87,7 +88,7 @@ public class OrderServiceTest {
 
     @Test
     public void getOrderById() throws Exception {
-        assertTimeout(Duration.ofMillis(110), () -> {
+        assertTimeout(ofMillis(Duration.LEVEL_I.getValue()), () -> {
             OrderDetDto orderDetail = generateRandomObject(OrderDetDto.class);
             Long orderId = orderDetail.id();
             Set<CartLineRowDto> cartLineRows = Set.of(
@@ -108,7 +109,7 @@ public class OrderServiceTest {
 
     @Test
     public void createOrder() throws Exception {
-        assertTimeout(Duration.ofMillis(110), () -> {
+        assertTimeout(ofMillis(Duration.LEVEL_I.getValue()), () -> {
             OrderNewDto newOrder = generateRandomObject(OrderNewDto.class);
             List<CartLine> cartlines = List.of(
                     generateRandomObject(CartLine.class),

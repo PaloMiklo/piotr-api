@@ -2,6 +2,7 @@ package com.api.piotr.service;
 
 import static com.api.piotr.util.ObjectRandomizer.generateRandomObject;
 import static com.api.piotr.util.Utils.mapToList;
+import static java.time.Duration.ofMillis;
 import static java.util.Optional.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
@@ -10,7 +11,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -30,6 +30,7 @@ import com.api.piotr.dto.ProductNewDto;
 import com.api.piotr.dto.ProductRowDto;
 import com.api.piotr.entity.Product;
 import com.api.piotr.repository.ProductRepository;
+import com.api.piotr.util.Duration;
 
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
@@ -44,7 +45,7 @@ public class ProductServiceTest {
 
     @Test
     public void getAllProducts() throws Exception {
-        assertTimeout(Duration.ofMillis(110), () -> {
+        assertTimeout(ofMillis(Duration.LEVEL_I.getValue()), () -> {
             List<ProductRowDto> products = new ArrayList<ProductRowDto>(3);
             products.add(generateRandomObject(ProductRowDto.class));
             products.add(generateRandomObject(ProductRowDto.class));
@@ -64,7 +65,7 @@ public class ProductServiceTest {
 
     @Test
     public void getProductById() throws Exception {
-        assertTimeout(Duration.ofMillis(110), () -> {
+        assertTimeout(ofMillis(Duration.LEVEL_I.getValue()), () -> {
             ProductDetDto detail = generateRandomObject(ProductDetDto.class);
             Long id = detail.id();
 
@@ -80,7 +81,7 @@ public class ProductServiceTest {
 
     @Test
     public void createProduct() throws Exception {
-        assertTimeout(Duration.ofMillis(110), () -> {
+        assertTimeout(ofMillis(Duration.LEVEL_I.getValue()), () -> {
             ProductNewDto newProduct = generateRandomObject(ProductNewDto.class);
             Product product = newProduct.toEntity();
             Long id = random.nextLong();

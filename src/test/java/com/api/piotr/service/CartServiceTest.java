@@ -1,11 +1,10 @@
 package com.api.piotr.service;
 
 import static java.lang.String.valueOf;
+import static java.time.Duration.ofMillis;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
-
-import java.time.Duration;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.api.piotr.dto.CartRecalculateDto;
 import com.api.piotr.dto.CartRecalculateResultDto;
+import com.api.piotr.util.Duration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,7 +24,7 @@ public class CartServiceTest {
 
     @Test
     public void recalculateCart_paidDelivery() throws Exception {
-        assertTimeout(Duration.ofMillis(150), () -> {
+        assertTimeout(ofMillis(Duration.LEVEL_II.getValue()), () -> {
             CartRecalculateDto payload = new ObjectMapper().readValue(
                     "{" +
                             "\"cartLines\":[" +

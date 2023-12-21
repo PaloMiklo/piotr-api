@@ -8,6 +8,7 @@ import static com.api.piotr.constant.PaidOptions.PAYMENT;
 import static com.api.piotr.constant.PaidOptions.SHIPPING;
 import static com.api.piotr.constant.PaidOptions.TWO_DAY_SHIPPING_SHIPPING;
 import static java.math.BigDecimal.valueOf;
+import static java.time.Duration.ofMillis;
 import static java.util.Optional.of;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
@@ -16,7 +17,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.Random;
 
@@ -31,6 +31,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.api.piotr.dto.PaidOptionItemDto;
 import com.api.piotr.repository.PaidOptionItemRepository;
+import com.api.piotr.util.Duration;
 
 @ExtendWith(MockitoExtension.class)
 public class PaidOptionServiceTest {
@@ -45,7 +46,7 @@ public class PaidOptionServiceTest {
 
         @Test
         public void getAllItemsByPaidOptionCodes() throws Exception {
-                assertTimeout(Duration.ofMillis(110), () -> {
+                assertTimeout(ofMillis(Duration.LEVEL_I.getValue()), () -> {
                         Page<PaidOptionItemDto> items = new PageImpl<PaidOptionItemDto>(List.of(
                                         new PaidOptionItemDto(CART_PAYMENT,
                                                         CART_PAYMENT,

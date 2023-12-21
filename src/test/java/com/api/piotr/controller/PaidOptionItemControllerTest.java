@@ -9,6 +9,7 @@ import static com.api.piotr.constant.PaidOptions.PAYMENT;
 import static com.api.piotr.constant.PaidOptions.SHIPPING;
 import static com.api.piotr.constant.PaidOptions.TWO_DAY_SHIPPING_SHIPPING;
 import static java.math.BigDecimal.valueOf;
+import static java.time.Duration.ofMillis;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertTimeout;
@@ -21,7 +22,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.time.Duration;
 import java.util.List;
 import java.util.Random;
 
@@ -37,6 +37,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.api.piotr.dto.PaidOptionItemDto;
 import com.api.piotr.repository.ImageRepository;
 import com.api.piotr.service.PaidOptionItemService;
+import com.api.piotr.util.Duration;
 
 @WebMvcTest(PaidOptionItemController.class)
 public class PaidOptionItemControllerTest {
@@ -54,7 +55,7 @@ public class PaidOptionItemControllerTest {
 
         @Test
         public void getAllItemsByPaidOptionCodes() throws Exception {
-                assertTimeout(Duration.ofMillis(110), () -> {
+                assertTimeout(ofMillis(Duration.LEVEL_I.getValue()), () -> {
                         Page<PaidOptionItemDto> items = new PageImpl<>(List.of(
                                         new PaidOptionItemDto(CART_PAYMENT,
                                                         CART_PAYMENT,

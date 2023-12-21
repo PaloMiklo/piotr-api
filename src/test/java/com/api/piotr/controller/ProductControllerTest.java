@@ -7,6 +7,7 @@ import static com.api.piotr.constant.ApiPaths.PRODUCT_PATH;
 import static com.api.piotr.util.ObjectRandomizer.generateRandomObject;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.time.Duration.ofMillis;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -29,7 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.math.BigDecimal;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -55,6 +55,7 @@ import com.api.piotr.repository.ImageRepository;
 import com.api.piotr.service.ImageTableService;
 import com.api.piotr.service.OrderService;
 import com.api.piotr.service.ProductService;
+import com.api.piotr.util.Duration;
 import com.api.piotr.util.ObjectRandomizer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -80,7 +81,7 @@ public class ProductControllerTest {
 
     @Test
     public void getAllProducts() throws Exception {
-        assertTimeout(Duration.ofMillis(110), () -> {
+        assertTimeout(ofMillis(Duration.LEVEL_I.getValue()), () -> {
             List<ProductRowDto> productsList = new ArrayList<>();
             productsList.add(new ProductRowDto(
                     1L,
@@ -112,7 +113,7 @@ public class ProductControllerTest {
 
     @Test
     public void getProductById() throws Exception {
-        assertTimeout(Duration.ofMillis(110), () -> {
+        assertTimeout(ofMillis(Duration.LEVEL_I.getValue()), () -> {
             ProductDetDto detail = generateRandomObject(ProductDetDto.class);
 
             given(productService.getProductById(detail.id())).willReturn(detail);
@@ -156,7 +157,7 @@ public class ProductControllerTest {
 
     @Test
     public void createProduct() throws Exception {
-        assertTimeout(Duration.ofMillis(150), () -> {
+        assertTimeout(ofMillis(Duration.LEVEL_I.getValue()), () -> {
             ProductNewDto product = generateRandomObject(ProductNewDto.class);
             Long id = 1L;
             MockMultipartFile image = new MockMultipartFile(

@@ -51,4 +51,4 @@ If you want to remove the volumes that were created by the container, run the fo
 `docker volume prune`
 
 # VS Code extensions for Java
-`Extension Pack for Java v0.25.15`
+`Extension Pack for Java v0.25.15`      

@@ -5,6 +5,7 @@ import static com.api.piotr.constant.ApiPaths.ORDER_LIST;
 import static com.api.piotr.constant.ApiPaths.ORDER_PATH;
 import static com.api.piotr.util.MapperUtils.asJsonString;
 import static com.api.piotr.util.ObjectRandomizer.generateRandomObject;
+import static java.time.Duration.ofMillis;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -24,7 +25,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +41,7 @@ import com.api.piotr.dto.OrderNewDto;
 import com.api.piotr.dto.OrderRowDto;
 import com.api.piotr.repository.ImageRepository;
 import com.api.piotr.service.OrderService;
+import com.api.piotr.util.Duration;
 
 @WebMvcTest(OrderController.class)
 public class OrderControllerTest {
@@ -56,7 +57,7 @@ public class OrderControllerTest {
 
     @Test
     public void getAllOrders() throws Exception {
-        assertTimeout(Duration.ofMillis(110), () -> {
+        assertTimeout(ofMillis(Duration.LEVEL_I.getValue()), () -> {
             List<OrderRowDto> ordersList = new ArrayList<>();
             ordersList.add(generateRandomObject(OrderRowDto.class));
             ordersList.add(generateRandomObject(OrderRowDto.class));
@@ -78,7 +79,7 @@ public class OrderControllerTest {
 
     @Test
     public void getOrderById() throws Exception {
-        assertTimeout(Duration.ofMillis(110), () -> {
+        assertTimeout(ofMillis(Duration.LEVEL_I.getValue()), () -> {
             given(orderService.getOrderById(anyLong())).willReturn(generateRandomObject(OrderDetDto.class));
 
             mockMvc.perform(get(ORDER_PATH + "/{id}", 1L))
@@ -104,7 +105,7 @@ public class OrderControllerTest {
 
     @Test
     public void createOrder() throws Exception {
-        assertTimeout(Duration.ofMillis(300), () -> {
+        assertTimeout(ofMillis(Duration.LEVEL_I.getValue()), () -> {
             OrderNewDto orderDto = generateRandomObject(OrderNewDto.class);
             Long orderId = 1L;
 
