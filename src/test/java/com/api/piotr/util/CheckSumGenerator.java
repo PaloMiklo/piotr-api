@@ -2,8 +2,12 @@ package com.api.piotr.util;
 
 import java.util.Random;
 import java.util.zip.CRC32;
+
 import org.junit.jupiter.api.Test;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class CheckSumGenerator {
     @Test
     void generate() {
@@ -12,7 +16,7 @@ public class CheckSumGenerator {
         CRC32 crc32 = new CRC32();
         crc32.update(bytes);
         long checksumValue = crc32.getValue();
-        System.out.println(checksumValue);
+        log.info(String.valueOf(checksumValue));
     }
 
     private String generateRandomString(int length) {
