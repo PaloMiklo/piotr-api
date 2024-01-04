@@ -29,8 +29,7 @@ public interface _HibernateRepository<T> {
 
     <S extends T> List<S> persistAllAndFlush(Iterable<S> entities);
 
-    // Merge methods are meant to propagate detached entity state changes
-    // if they are really needed
+    // Merge methods are meant to propagate detached entity state changes if they are really needed
 
     <S extends T> S merge(S entity);
 
