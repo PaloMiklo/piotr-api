@@ -37,6 +37,7 @@ public class _HibernateRepositoryImpl<T> implements _HibernateRepository<T> {
         return unsupportedSave();
     }
 
+    // ----------------------- PERSIST ----------------------- 
     public <S extends T> S persist(S entity) {
         entityManager.persist(entity);
         return entity;
@@ -67,6 +68,7 @@ public class _HibernateRepositoryImpl<T> implements _HibernateRepository<T> {
         });
     }
 
+    // ----------------------- MERGE ----------------------- 
     public <S extends T> S merge(S entity) {
         return entityManager.merge(entity);
     }
@@ -96,6 +98,7 @@ public class _HibernateRepositoryImpl<T> implements _HibernateRepository<T> {
         });
     }
 
+    // ----------------------- UPDATE ----------------------- 
     public <S extends T> S update(S entity) {
         session().merge(entity);
         return entity;
