@@ -21,3 +21,4 @@ logging:
     root: INFO
     org.springframework.web: DEBUG
     com.api.piotr: DEBUG
+    com.palomiklo.streampulse: TRACE
