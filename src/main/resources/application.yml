@@ -1,0 +1,4 @@
+streampulse.url: jdbc:postgresql://localhost:5432/piotr
+streampulse.username: postgres
+streampulse.password: postgres
+streampulse.driver-class-name: org.postgresql.Driver
